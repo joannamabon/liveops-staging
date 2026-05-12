@@ -1100,6 +1100,7 @@ function saC(idx){const c=CLOSED[idx];sel=c.action.id;rl();rd(c.action.id);docum
 function rd(id){
   if(id==='A1'){rdA1(id);return;}
   const a=ACTIONS.find(x=>x.id===id);if(!a)return;
+  const _sw=document.querySelector('.step-list-wrap');const _st=_sw?_sw.scrollTop:0;
   const ch=gc(id),l=gl(id),m=gm(id);
   const isClosed=!!m.closedAt;
   const tab=m.detailTab||'steps';
@@ -1196,6 +1197,7 @@ function rd(id){
       <button class="detail-tab-btn${tab==='history'?' on':''}" onclick="rdTab('${id}','history')">History</button>
     </div>
     ${tabContent}`;
+  requestAnimationFrame(()=>{const s=document.querySelector('.step-list-wrap');if(s)s.scrollTop=_st;});
 }
 function rdTab(id,tab){gm(id).detailTab=tab;if(sel===id)rd(id);}
 function rdToggleHide(id){const m=gm(id);m.showComplete=!m.showComplete;if(sel===id){const sw=document.querySelector('.step-list-wrap');const st=sw?sw.scrollTop:0;rd(id);requestAnimationFrame(()=>{const s=document.querySelector('.step-list-wrap');if(s)s.scrollTop=st;});}}
@@ -1204,6 +1206,7 @@ function rdToggleRejected(id){const m=gm(id);m.showRejected=!m.showRejected;if(s
 /* ===== A1 ABUSE REPORT — STEP UX ===== */
 function rdA1(id){
   const a=ACTIONS.find(x=>x.id===id);if(!a)return;
+  const _sw=document.querySelector('.step-list-wrap');const _st=_sw?_sw.scrollTop:0;
   const ch=gc(id),l=gl(id),m=gm(id);
   const isClosed=!!m.closedAt;
   const tab=m.detailTab||'steps';
@@ -1306,6 +1309,7 @@ function rdA1(id){
       <button class="detail-tab-btn${tab==='history'?' on':''}" onclick="a1Tab('history')">History</button>
     </div>
     ${tabContent}`;
+  requestAnimationFrame(()=>{const s=document.querySelector('.step-list-wrap');if(s)s.scrollTop=_st;});
 }
 
 function a1Tab(tab){gm('A1').detailTab=tab;if(sel==='A1')rdA1('A1');}
