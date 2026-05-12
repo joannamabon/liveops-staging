@@ -321,7 +321,8 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
 .step-cta-btn.orange{background:#F36805;color:#FFFFFF;border:none;}
 .step-cta-btn.dark{background:#2B2A28;color:rgba(255,255,255,0.9);border:none;}
 .step-cta-btn.outline{background:transparent;border:1.5px solid #E7E2DA;color:#242E30;}
-.step-cta-btn:disabled{opacity:0.4;cursor:not-allowed;}
+.step-cta-btn.muted{background:#F0ECE6;color:#8C867E;border:none;}
+.step-cta-btn:disabled{opacity:1;cursor:not-allowed;}
 .step-complete-footer{font-size:12px;font-weight:400;color:rgba(0,0,0,0.76);line-height:16px;}
 .list-filter-row{display:flex;gap:8px;align-items:center;}
 .list-filter-chip{display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(0,0,0,0.2);border-radius:20px;padding:5px 10px 5px 8px;font-size:14px;font-weight:700;background:var(--bg);cursor:pointer;color:var(--text);font-family:inherit;white-space:nowrap;}
@@ -1225,7 +1226,7 @@ function rdA1(id){
     } else if(step.id==='notes'){
       const btnLabel=done?'Update notes':'Save notes';
       const hasNotes=!!(m.notes&&m.notes.trim());
-      const btnCls=done?'outline':(hasNotes?'orange':'dark');
+      const btnCls=done?'outline':(hasNotes?'orange':'muted');
       const btnDisabledNotes=(!done&&!isSk&&!hasNotes)?' disabled':'';
       inner+=`<label class="step-notes-label">Notes from call with Courier</label>
         <div class="step-notes-wrap"><textarea id="a1-notes-ta" class="step-notes-ta" rows="4" placeholder="Add notes here" oninput="a1NoteInput(this)">${m.notes||''}</textarea></div>
@@ -1299,7 +1300,7 @@ function rdA1(id){
 }
 
 function a1Tab(tab){gm('A1').detailTab=tab;if(sel==='A1')rdA1('A1');}
-function a1NoteInput(ta){const btn=document.getElementById('a1-save-btn');if(!btn)return;const has=ta.value.trim().length>0;btn.className='step-cta-btn '+(has?'orange':'dark');btn.disabled=!has;}
+function a1NoteInput(ta){const btn=document.getElementById('a1-save-btn');if(!btn)return;const has=ta.value.trim().length>0;btn.className='step-cta-btn '+(has?'orange':'muted');btn.disabled=!has;}
 function a1ToggleHide(id){const m=gm(id);m.showComplete=!m.showComplete;if(sel===id){const sw=document.querySelector('.step-list-wrap');const st=sw?sw.scrollTop:0;rdA1(id);requestAnimationFrame(()=>{const s=document.querySelector('.step-list-wrap');if(s)s.scrollTop=st;});}}
 function a1StepMenu(e,id,i){e.stopPropagation();promptSkipStep(id,i);}
 
