@@ -1038,7 +1038,7 @@ function renderOpenCard(a){
   const m=gm(a.id);const cn=m.cardNote?`<div class="card-note">"${m.cardNote}"</div>`:'';
   const tags=renderTags(a)+(a.isNew?ntag():'');
   const footer=a.assignedToMe===false
-    ?`<span>Opened: ${minsAgo(a.openedAt||Date.now())}</span><span style="color:#F36805;font-weight:700">Unassigned</span>`
+    ?`<span>Opened: ${minsAgo(a.openedAt||Date.now())}</span><strong>Unassigned</strong>`
     :`<span>Opened: ${minsAgo(a.openedAt||Date.now())}</span><span>${a.assignedBy?`Assigned to me by <strong>${a.assignedBy}</strong>: ${minsAgo(a.assignedAt||a.openedAt)}`:`Auto-assigned to me: ${minsAgo(a.assignedAt||a.openedAt)}`}</span>`;
   return`<div class="action-card ${sel===a.id?'selected':''}" onclick="sa('${a.id}')">
     <div class="card-top">
