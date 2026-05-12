@@ -1228,7 +1228,7 @@ function rdA1(id){
       const hasNotes=!!(m.notes&&m.notes.trim());
       const btnCls=done?'outline':(hasNotes?'orange':'muted');
       const btnDisabledNotes=(!done&&!isSk&&!hasNotes)?' disabled':'';
-      inner+=`<label class="step-notes-label">Notes from call with Courier</label>
+      inner+=`<label class="step-notes-label">Notes from call with ${a.courierName}</label>
         <div class="step-notes-wrap"><textarea id="a1-notes-ta" class="step-notes-ta" rows="4" placeholder="Add notes here" oninput="a1NoteInput(this)">${m.notes||''}</textarea></div>
         <button id="a1-save-btn" class="step-cta-btn ${btnCls}"${btnDisabledNotes} onclick="a1SaveNotes('${id}',${i})">${btnLabel}</button>`;
       inner+=done?`<div class="step-complete-footer">You completed this step ${minsAgo(ch[i])}</div>`:`<div class="step-complete-footer">Assigned to ${a.assignedTo}</div>`;
@@ -1244,7 +1244,7 @@ function rdA1(id){
         return`<div class="step-cb-row" onclick="a1ToggleCb('${id}',${ci})"><div class="step-cb-box${isChk?' chk':''}"></div><span class="step-cb-label">${lbl}</span></div>`;
       }).join('');
       inner+=`<div class="step-cb-list">${cbRows}</div>
-        <button class="step-cta-btn ${btnCls}"${btnDisabled} onclick="a1Escalate('${id}',${i})">${done?'Escalation raised':'Escalate to Safety Team'}</button>`;
+        <button class="step-cta-btn ${btnCls}"${btnDisabled} onclick="a1Escalate('${id}',${i})">${done?'View ticket':'Escalate to Safety Team'}</button>`;
       inner+=done?`<div class="step-complete-footer">You completed this step ${minsAgo(ch[i])}</div>`:`<div class="step-complete-footer">Assigned to ${a.assignedTo}</div>`;
       inner+=skipTag;
     }
