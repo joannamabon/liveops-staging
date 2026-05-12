@@ -108,10 +108,17 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
 #toast.visible{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto;}
 #toast-msg{flex:1;}
 #toast-close{background:none;border:none;color:rgba(255,255,255,0.6);cursor:pointer;padding:2px;display:flex;align-items:center;margin-left:var(--dt-spacing-b);flex-shrink:0;line-height:1;}
-.detail-header{padding:12px 16px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
-.detail-header-row{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--dt-spacing-b);margin-bottom:var(--dt-spacing-b);}
-.detail-back{display:inline-flex;align-items:center;gap:var(--dt-spacing-a);font-size:14px;color:var(--text2);cursor:pointer;margin-bottom:var(--dt-spacing-b);padding:0;background:none;border:none;min-height:28px;}
-.detail-title{font-size:16px;font-weight:900;flex:1;line-height:1.5;}
+.detail-header{padding:8px 16px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.detail-back{display:inline-flex;align-items:center;gap:4px;font-size:14px;font-weight:700;color:#242E30;cursor:pointer;margin-bottom:6px;padding:0;background:none;border:none;min-height:28px;width:167px;}
+/* Detail header — title block (mobile: stacked; web: inline row) */
+.dh-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.dh-title-block{flex:1;min-width:0;}
+.dh-title{font-size:28px;font-weight:900;line-height:32px;color:rgba(0,0,0,0.76);margin-bottom:6px;}
+.dh-meta-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.dh-orderid{font-size:14px;font-weight:400;color:rgba(0,0,0,0.76);line-height:20px;flex-shrink:0;}
+.dh-menu-btn{background:none;border:none;cursor:pointer;font-size:20px;color:#3C4C4F;padding:4px 6px;border-radius:8px;margin:-2px -6px 0 0;line-height:1;flex-shrink:0;}
+.dh-menu-btn:hover{background:#F0ECE6;}
+.dh-times{display:flex;flex-direction:column;font-size:12px;color:rgba(0,0,0,0.64);line-height:16px;margin-top:6px;gap:1px;}
 .detail-meta{display:flex;gap:var(--dt-spacing-b);align-items:center;flex-wrap:wrap;}
 .detail-body{flex:1;overflow-y:auto;padding:var(--dt-spacing-d) var(--dt-spacing-d) 32px;-webkit-overflow-scrolling:touch;}
 .detail-action-bar{display:none;padding:var(--dt-spacing-c) var(--dt-spacing-d);border-top:1px solid var(--border);background:var(--bg);flex-shrink:0;box-shadow:var(--dt-elevation-above-20);}
@@ -337,7 +344,9 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
   .main-view.showing-detail .action-list{display:flex;}
   .detail-back{display:none;}
   .detail-header{padding:var(--dt-spacing-d) var(--dt-spacing-e) 14px;}
-  .detail-title{font-size:16px;font-weight:900;}
+  .dh-title-block{display:flex;flex-direction:row;align-items:center;flex-wrap:wrap;gap:12px;}
+  .dh-title{margin-bottom:0;font-size:28px;}
+  .dh-meta-row{flex-wrap:wrap;}
   .detail-body{padding:var(--dt-spacing-d) var(--dt-spacing-e);}
   .trigger-row{padding:var(--dt-spacing-b) var(--dt-spacing-d);font-size:12px;}
   .stat-val{font-size:20px;}
@@ -1117,15 +1126,22 @@ function rd(id){
 
   document.getElementById('detail-panel').innerHTML=`
     <div class="detail-header">
-      <button class="detail-back" onclick="backToList()"><icon-chevron-left size="xs" style="color:#F36805"></icon-chevron-left> Back to My Issues</button>
-      <div class="detail-header-row" style="align-items:center;margin-bottom:4px">
-        <div style="font-size:28px;font-weight:900;line-height:32px;color:rgba(0,0,0,0.76);flex:1;min-width:0">${a.type}</div>
-        ${isClosed
-          ?`<button class="status-chip" style="opacity:0.6;cursor:default">Closed <icon-chevron-down size="xs"></icon-chevron-down></button>`
-          :`<button class="status-chip" onclick="promptCloseIncident('${id}')">Open <icon-chevron-down size="xs"></icon-chevron-down></button>`}
+      <button class="detail-back" onclick="backToList()"><icon-chevron-left size="xs" style="color:#F36805"></icon-chevron-left> Return to issue list</button>
+      <div class="dh-top">
+        <div class="dh-title-block">
+          <div class="dh-title">${a.type}</div>
+          <div class="dh-meta-row">
+            ${a.orderId?`<span class="dh-orderid">${a.orderId}</span>`:''}
+            ${renderTags(a)}
+          </div>
+        </div>
+        ${isClosed?'':`<button class="dh-menu-btn" onclick="promptCloseIncident('${id}')">⋮</button>`}
       </div>
-      <span style="font-size:12px;font-weight:400;line-height:16px;color:rgba(0,0,0,0.64)">Opened: ${minsAgo(a.openedAt||Date.now())}</span>
-      ${isClosed?`<span style="font-size:12px;font-weight:400;line-height:16px;color:rgba(0,0,0,0.64)">Closed: ${minsAgo(m.closedAt)}</span>`:''}
+      <div class="dh-times">
+        <span>Opened: ${minsAgo(a.openedAt||Date.now())}</span>
+        <span>${a.assignedAt?`Assigned: ${minsAgo(a.assignedAt)}`:'Assigned: auto-assigned'}</span>
+        ${isClosed?`<span>Closed: ${minsAgo(m.closedAt)}</span>`:''}
+      </div>
     </div>
     <div class="detail-tabs">
       <button class="detail-tab-btn${tab==='steps'?' on':''}" onclick="rdTab('${id}','steps')">Steps</button>
@@ -1216,15 +1232,22 @@ function rdA1(id){
 
   document.getElementById('detail-panel').innerHTML=`
     <div class="detail-header">
-      <button class="detail-back" onclick="backToList()"><icon-chevron-left size="xs" style="color:#F36805"></icon-chevron-left> Back to My Issues</button>
-      <div class="detail-header-row" style="align-items:center;margin-bottom:4px">
-        <div style="font-size:28px;font-weight:900;line-height:32px;color:rgba(0,0,0,0.76);flex:1;min-width:0">${a.type}</div>
-        ${isClosed
-          ?`<button class="status-chip" style="opacity:0.6;cursor:default">Closed <icon-chevron-down size="xs"></icon-chevron-down></button>`
-          :`<button class="status-chip" onclick="promptCloseIncident('${id}')">Open <icon-chevron-down size="xs"></icon-chevron-down></button>`}
+      <button class="detail-back" onclick="backToList()"><icon-chevron-left size="xs" style="color:#F36805"></icon-chevron-left> Return to issue list</button>
+      <div class="dh-top">
+        <div class="dh-title-block">
+          <div class="dh-title">${a.type}</div>
+          <div class="dh-meta-row">
+            ${a.orderId?`<span class="dh-orderid">${a.orderId}</span>`:''}
+            ${renderTags(a)}
+          </div>
+        </div>
+        ${isClosed?'':`<button class="dh-menu-btn" onclick="promptCloseIncident('${id}')">⋮</button>`}
       </div>
-      <span style="font-size:12px;font-weight:400;line-height:16px;color:rgba(0,0,0,0.64)">Opened: ${minsAgo(a.openedAt||Date.now())}</span>
-      ${isClosed?`<span style="font-size:12px;font-weight:400;line-height:16px;color:rgba(0,0,0,0.64)">Closed: ${minsAgo(m.closedAt)}</span>`:''}
+      <div class="dh-times">
+        <span>Opened: ${minsAgo(a.openedAt||Date.now())}</span>
+        <span>${a.assignedAt?`Assigned: ${minsAgo(a.assignedAt)}`:'Assigned: auto-assigned'}</span>
+        ${isClosed?`<span>Closed: ${minsAgo(m.closedAt)}</span>`:''}
+      </div>
     </div>
     <div class="detail-tabs">
       <button class="detail-tab-btn${tab==='steps'?' on':''}" onclick="a1Tab('steps')">Steps</button>
