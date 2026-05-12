@@ -320,8 +320,10 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
 .step-cta-btn:disabled{opacity:0.4;cursor:not-allowed;}
 .step-complete-footer{font-size:12px;font-weight:400;color:rgba(0,0,0,0.64);line-height:16px;}
 .list-filter-row{display:flex;gap:8px;align-items:center;}
-.list-filter-chip{display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(0,0,0,0.2);border-radius:20px;padding:5px 10px 5px 8px;font-size:14px;font-weight:500;background:var(--bg);cursor:pointer;color:var(--text);font-family:inherit;white-space:nowrap;}
+.list-filter-chip{display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(0,0,0,0.2);border-radius:20px;padding:5px 10px 5px 8px;font-size:14px;font-weight:700;background:var(--bg);cursor:pointer;color:var(--text);font-family:inherit;white-space:nowrap;}
 .list-filter-chip svg{flex-shrink:0;}
+.list-filter-chip.active{background:var(--dark);color:var(--light);border-color:var(--dark);}
+.list-filter-icon.has-filter{background:#FFF3EC;border-color:#F36805;color:#F36805;}
 .list-filter-icon{border:1px solid rgba(0,0,0,0.2);border-radius:8px;padding:5px 7px;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;margin-left:auto;}
 .progress-section{padding:var(--dt-spacing-d) var(--dt-spacing-d) var(--dt-spacing-e);border-top:1px solid var(--border);}
 .progress-label{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;}
@@ -430,13 +432,9 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
           <div class="list-sub" id="list-sub">Last updated: just now</div>
           <div class="list-filter-row">
             <button class="list-filter-chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My issues<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-            <button class="list-filter-chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Open<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-            <button class="list-filter-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="9" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="16" cy="12" r="2" fill="currentColor" stroke="none"/><circle cx="7" cy="18" r="2" fill="currentColor" stroke="none"/></svg></button>
+            <button class="list-filter-chip" id="status-filter-chip" onclick="toggleStatusFilter()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span id="status-chip-label">Open</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <button class="list-filter-icon" id="type-filter-btn" onclick="showTypeFilters()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="9" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="16" cy="12" r="2" fill="currentColor" stroke="none"/><circle cx="7" cy="18" r="2" fill="currentColor" stroke="none"/></svg></button>
           </div>
-        </div>
-        <div class="tab-bar">
-          <button class="tab-btn on" id="tab-actions" onclick="switchTab('actions',this)">My issues <span class="tab-count" id="count-pill">6</span></button>
-          <button class="tab-btn" id="tab-closed" onclick="switchTab('closed',this)">Recently closed <span class="tab-count" id="closed-count-pill">0</span></button>
         </div>
         <div class="list-scroll" id="action-list-scroll"></div>
       </div>
@@ -544,7 +542,7 @@ function mact(k){
   if(mcb){const c=mcb;mcb=null;c(k);}
 }
 function bsOvClick(e){if(e.target===document.getElementById('bs-ov'))mact('n');}
-window.addEventListener('pageshow',(e)=>{if(e.persisted){activeTab='actions';document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));const at=document.getElementById('tab-actions');if(at)at.classList.add('on');sel=null;document.getElementById('detail-panel').innerHTML='<div class="detail-empty">Select an issue to see details and steps</div>';document.getElementById('main-view').classList.remove('showing-detail');rl();}});
+window.addEventListener('pageshow',(e)=>{if(e.persisted){activeTab='actions';updateStatusChip();sel=null;document.getElementById('detail-panel').innerHTML='<div class="detail-empty">Select an issue to see details and steps</div>';document.getElementById('main-view').classList.remove('showing-detail');rl();}});
 document.addEventListener('DOMContentLoaded',()=>{
   bsTouchInit();
   rl();
@@ -727,15 +725,12 @@ function openClosedTicket(idx,e){
   m.showComplete=false;
   CLOSED.splice(idx,1);
   updateClosedCount();
-  switchTab('actions',document.getElementById('tab-actions'));
+  activeTab='actions';updateStatusChip();
   sel=a.id;rl();rd(a.id);
   document.getElementById('main-view').classList.add('showing-detail');
 }
 function updateClosedCount(){
-  const now=Date.now();
-  const recent=CLOSED.filter(c=>(now-c.closedAt)<3600000);
-  const pill=document.getElementById('closed-count-pill');
-  if(pill)pill.textContent=recent.length;
+  /* count pills removed — status chip label updated via updateStatusChip() */
 }
 function callAllCouriers(e,id,si,ck){
   e.stopPropagation();
@@ -988,27 +983,36 @@ function bsTouchInit(){
   });
 }
 
-/* ===== TAB / NAV ===== */
-function switchTab(tab,el){
-  activeTab=tab;
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));
-  el.classList.add('on');
-  const fh=document.getElementById('filter-header');if(fh)fh.style.display=(tab==='actions')?'':'none';
+/* ===== FILTER / NAV ===== */
+function toggleStatusFilter(){
+  activeTab=(activeTab==='actions')?'closed':'actions';
+  updateStatusChip();
   sel=null;
   document.getElementById('detail-panel').innerHTML='<div class="detail-empty">Select an issue to see details and steps</div>';
   if(isMobile())document.getElementById('main-view').classList.remove('showing-detail');
   rl();
 }
+function updateStatusChip(){
+  const lbl=document.getElementById('status-chip-label');if(lbl)lbl.textContent=(activeTab==='closed')?'Closed':'Open';
+  const chip=document.getElementById('status-filter-chip');if(chip)chip.classList.toggle('active',activeTab==='closed');
+}
+function showTypeFilters(){
+  const opts=[{f:'all',l:'All issues'},{f:'safety',l:'Safety only'},{f:'zone',l:'Zone issues'},{f:'call',l:'Needs call'}];
+  mcb=null;
+  showM('','','Filter by type','','',
+    `<div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">${opts.map(o=>`<button onclick="setFilter('${o.f}');mact('n')" style="padding:12px 16px;font-size:14px;font-weight:${af===o.f?700:400};border:1px solid ${af===o.f?'var(--dark)':'var(--border)'};border-radius:8px;background:${af===o.f?'var(--dark)':'transparent'};color:${af===o.f?'var(--light)':'var(--text)'};font-family:inherit;cursor:pointer;text-align:left">${o.l}</button>`).join('')}</div>`,
+    [{l:'Done',k:'n',c:'n'}]
+  );
+}
 function toggleZone(){document.getElementById('zone-view').classList.toggle('active');document.getElementById('main-view').classList.toggle('hidden');}
 function fa(){return ACTIONS.filter(a=>!gm(a.id).closedAt&&(a.appearsAfterClosed===undefined||CLOSED.length>=a.appearsAfterClosed)&&(af==='all'||(af==='safety'&&a.severity==='safety')||(af==='zone'&&a.isZone)||(af==='call'&&a.needsCall))).sort((a,b)=>SO[a.severity]-SO[b.severity]);}
-function setFilter(f,el){af=f;document.querySelectorAll('[data-filter]').forEach(c=>{c.isSelected=(c.dataset.filter===f);});rl();}
-function backToList(){activeTab='actions';document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));const actTab=document.getElementById('tab-actions');if(actTab)actTab.classList.add('on');document.getElementById('main-view').classList.remove('showing-detail');sel=null;rl();}
+function setFilter(f){af=f;const btn=document.getElementById('type-filter-btn');if(btn)btn.classList.toggle('has-filter',f!=='all');rl();}
+function backToList(){activeTab='actions';updateStatusChip();document.getElementById('main-view').classList.remove('showing-detail');sel=null;rl();}
 
 /* ===== LIST RENDER ===== */
 function rl(){
   if(activeTab==='closed'){renderClosedTab();return;}
   const items=fa();
-  const cp=document.getElementById('count-pill');if(cp)cp.textContent=items.length;
   document.getElementById('action-list-scroll').innerHTML=items.map(a=>{
     const m=gm(a.id);const cn=m.cardNote?`<div class="card-note">"${m.cardNote}"</div>`:'';
     const tags=renderTags(a)+(a.isNew?ntag():'');
@@ -1028,8 +1032,6 @@ function rl(){
 function renderClosedTab(){
   const now=Date.now();
   const recent=CLOSED.filter(c=>(now-c.closedAt)<3600000);
-  const cp2=document.getElementById('closed-count-pill');if(cp2)cp2.textContent=recent.length;
-  const cp=document.getElementById('count-pill');if(cp)cp.textContent=fa().length;
   document.getElementById('action-list-scroll').innerHTML=(recent.length?
     recent.map((c,idx)=>`<div class="closed-card ${sel==='C'+idx?'selected':''}" onclick="saC(${idx})">
       <div class="closed-card-top"><div class="card-type">${c.action.type}</div><div class="closed-time">${timeAgo(c.closedAt)}</div></div>
@@ -1053,7 +1055,7 @@ function ms2(id,i){
   }else{if(sel===id)rd(id);}
   rl();
 }
-function sa(id){const a=ACTIONS.find(x=>x.id===id);if(a)a.isNew=false;activeTab='actions';document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));const actTab=document.getElementById('tab-actions');if(actTab)actTab.classList.add('on');sel=id;rl();rd(id);document.getElementById('main-view').classList.add('showing-detail');}
+function sa(id){const a=ACTIONS.find(x=>x.id===id);if(a)a.isNew=false;activeTab='actions';updateStatusChip();sel=id;rl();rd(id);document.getElementById('main-view').classList.add('showing-detail');}
 function saC(idx){const c=CLOSED[idx];sel=c.action.id;rl();rd(c.action.id);document.getElementById('main-view').classList.add('showing-detail');}
 
 function rd(id){
