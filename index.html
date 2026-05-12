@@ -1241,7 +1241,7 @@ function rdA1(id){
         return`<div class="step-cb-row" onclick="a1ToggleCb('${id}',${ci})"><div class="step-cb-box${isChk?' chk':''}"></div><span class="step-cb-label">${lbl}</span></div>`;
       }).join('');
       inner+=`<div class="step-cb-list">${cbRows}</div>
-        <button class="step-cta-btn ${done?'outline':'dark'}"${btnDisabled} onclick="a1Escalate('${id}',${i})">${done?'Ticket':'Escalate to Safety Team'}</button>`;
+        <button class="step-cta-btn ${btnCls}"${btnDisabled} onclick="a1Escalate('${id}',${i})">${done?'Escalation raised':'Escalate to Safety Team'}</button>`;
       inner+=done?`<div class="step-complete-footer">You completed this step ${minsAgo(ch[i])}</div>`:`<div class="step-complete-footer">Assigned to ${a.assignedTo}</div>`;
       inner+=skipTag;
     }
