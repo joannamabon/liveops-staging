@@ -666,7 +666,7 @@ function splitOrderM(orderId,cb){
 }
 function promptCloseIncident(id){
   mcb=(k)=>{if(k.startsWith('r:'))closeAndResolve(id,k.slice(2));};
-  showM('<icon-close size="s"></icon-close>','warn','Close issue?','Select a reason — this cannot be undone without using "Open" in Recently closed','stern',
+  showM('<icon-close size="s"></icon-close>','warn','Close issue?','Select a reason for closing this issue','stern',
     `<div style="display:flex;flex-direction:column;gap:var(--dt-spacing-b);margin-top:var(--dt-spacing-b)">${CLOSE_REASONS.map(r=>`<pie-button variant="secondary" fullWidth onclick="mact('r:${r}')">${r}</pie-button>`).join('')}</div>`,
     [{l:'Back',c:'',k:'n'}]);
 }
@@ -686,14 +686,17 @@ function showItemsM(a){
 /* ===== INCIDENT MANAGEMENT ===== */
 function closeAndResolve(id,reason){
   const a=ACTIONS.find(x=>x.id===id);if(!a)return;
+  const m=gm(id);
   gl(id).push({t:ts(),text:`<strong>Issue closed</strong> — ${reason}`,agent:true});
-  CLOSED.unshift({action:a,closedAt:Date.now(),closedReason:reason});
-  ACTIONS.splice(ACTIONS.findIndex(x=>x.id===id),1);
-  sel=null;
-  if(isMobile())document.getElementById('main-view').classList.remove('showing-detail');
+  m.closedAt=Date.now();
+  m.closedReason=reason;
+  m.showComplete=true;
+  CLOSED.unshift({action:a,closedAt:m.closedAt,closedReason:reason});
+  sel=id;
   updateClosedCount();rl();
-  document.getElementById('detail-panel').innerHTML='<div class="detail-empty">Select an issue to see details and steps</div>';
-  showToast('Issue closed — '+reason);
+  rd(id);
+  // Mobile: keep showing-detail so user sees the closed panel
+  document.getElementById('main-view').classList.add('showing-detail');
 }
 function skipStep(id,i,reason){
   if(!skipped[id])skipped[id]={};
@@ -708,12 +711,15 @@ function skipStep(id,i,reason){
 function openClosedTicket(idx,e){
   if(e)e.stopPropagation();
   const c=CLOSED[idx];
-  ACTIONS.unshift(c.action);
+  const a=c.action;
+  const m=gm(a.id);
+  delete m.closedAt;
+  delete m.closedReason;
+  m.showComplete=false;
   CLOSED.splice(idx,1);
-  const id=c.action.id;
   updateClosedCount();
   switchTab('actions',document.getElementById('tab-actions'));
-  sel=id;rl();rd(id);
+  sel=a.id;rl();rd(a.id);
   document.getElementById('main-view').classList.add('showing-detail');
 }
 function updateClosedCount(){
@@ -985,7 +991,7 @@ function switchTab(tab,el){
   rl();
 }
 function toggleZone(){document.getElementById('zone-view').classList.toggle('active');document.getElementById('main-view').classList.toggle('hidden');}
-function fa(){return ACTIONS.filter(a=>af==='all'||(af==='safety'&&a.severity==='safety')||(af==='zone'&&a.isZone)||(af==='call'&&a.needsCall)).sort((a,b)=>SO[a.severity]-SO[b.severity]);}
+function fa(){return ACTIONS.filter(a=>!gm(a.id).closedAt&&(af==='all'||(af==='safety'&&a.severity==='safety')||(af==='zone'&&a.isZone)||(af==='call'&&a.needsCall))).sort((a,b)=>SO[a.severity]-SO[b.severity]);}
 function setFilter(f,el){af=f;document.querySelectorAll('[data-filter]').forEach(c=>{c.isSelected=(c.dataset.filter===f);});rl();}
 function backToList(){activeTab='actions';document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));const actTab=document.getElementById('tab-actions');if(actTab)actTab.classList.add('on');document.getElementById('main-view').classList.remove('showing-detail');sel=null;rl();}
 
@@ -1039,13 +1045,15 @@ function ms2(id,i){
   rl();
 }
 function sa(id){const a=ACTIONS.find(x=>x.id===id);if(a)a.isNew=false;activeTab='actions';document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));const actTab=document.getElementById('tab-actions');if(actTab)actTab.classList.add('on');sel=id;rl();rd(id);document.getElementById('main-view').classList.add('showing-detail');}
-function saC(idx){sel='C'+idx;rl();rdClosed(idx);document.getElementById('main-view').classList.add('showing-detail');}
+function saC(idx){const c=CLOSED[idx];sel=c.action.id;rl();rd(c.action.id);document.getElementById('main-view').classList.add('showing-detail');}
 
 function rd(id){
   if(id==='A1'){rdA1(id);return;}
   const a=ACTIONS.find(x=>x.id===id);if(!a)return;
   const ch=gc(id),l=gl(id),m=gm(id);
+  const isClosed=!!m.closedAt;
   const tab=m.detailTab||'steps';
+  if(isClosed)m.showComplete=true;
   if(m.showComplete===undefined)m.showComplete=false;
   const showComplete=m.showComplete;
   const firstInc=a.steps.findIndex((s,i)=>!ch[i]&&!(skipped[id]&&skipped[id][i]));
@@ -1113,9 +1121,12 @@ function rd(id){
       <button class="detail-back" onclick="backToList()"><icon-chevron-left size="xs" style="color:#F36805"></icon-chevron-left> Back to My Issues</button>
       <div class="detail-header-row" style="align-items:center;margin-bottom:4px">
         <div style="font-size:28px;font-weight:900;line-height:32px;color:rgba(0,0,0,0.76);flex:1;min-width:0">${a.type}</div>
-        <button class="status-chip" onclick="promptCloseIncident('${id}')">Open <icon-chevron-down size="xs"></icon-chevron-down></button>
+        ${isClosed
+          ?`<button class="status-chip" style="opacity:0.6;cursor:default">Closed <icon-chevron-down size="xs"></icon-chevron-down></button>`
+          :`<button class="status-chip" onclick="promptCloseIncident('${id}')">Open <icon-chevron-down size="xs"></icon-chevron-down></button>`}
       </div>
       <span style="font-size:12px;font-weight:400;line-height:16px;color:rgba(0,0,0,0.64)">Opened: ${minsAgo(a.openedAt||Date.now())}</span>
+      ${isClosed?`<span style="font-size:12px;font-weight:400;line-height:16px;color:rgba(0,0,0,0.64)">Closed: ${minsAgo(m.closedAt)}</span>`:''}
     </div>
     <div class="detail-tabs">
       <button class="detail-tab-btn${tab==='steps'?' on':''}" onclick="rdTab('${id}','steps')">Steps</button>
@@ -1131,7 +1142,9 @@ function rdToggleHide(id){const m=gm(id);m.showComplete=m.showComplete===false?t
 function rdA1(id){
   const a=ACTIONS.find(x=>x.id===id);if(!a)return;
   const ch=gc(id),l=gl(id),m=gm(id);
+  const isClosed=!!m.closedAt;
   const tab=m.detailTab||'steps';
+  if(isClosed)m.showComplete=true;
   if(m.showComplete===undefined)m.showComplete=false;
   const showComplete=m.showComplete;
   if(!m.escalateChecks)m.escalateChecks=[false,false,false];
@@ -1208,9 +1221,12 @@ function rdA1(id){
       <button class="detail-back" onclick="backToList()"><icon-chevron-left size="xs" style="color:#F36805"></icon-chevron-left> Back to My Issues</button>
       <div class="detail-header-row" style="align-items:center;margin-bottom:4px">
         <div style="font-size:28px;font-weight:900;line-height:32px;color:rgba(0,0,0,0.76);flex:1;min-width:0">${a.type}</div>
-        <button class="status-chip" onclick="promptCloseIncident('${id}')">Open <icon-chevron-down size="xs"></icon-chevron-down></button>
+        ${isClosed
+          ?`<button class="status-chip" style="opacity:0.6;cursor:default">Closed <icon-chevron-down size="xs"></icon-chevron-down></button>`
+          :`<button class="status-chip" onclick="promptCloseIncident('${id}')">Open <icon-chevron-down size="xs"></icon-chevron-down></button>`}
       </div>
       <span style="font-size:12px;font-weight:400;line-height:16px;color:rgba(0,0,0,0.64)">Opened: ${minsAgo(a.openedAt||Date.now())}</span>
+      ${isClosed?`<span style="font-size:12px;font-weight:400;line-height:16px;color:rgba(0,0,0,0.64)">Closed: ${minsAgo(m.closedAt)}</span>`:''}
     </div>
     <div class="detail-tabs">
       <button class="detail-tab-btn${tab==='steps'?' on':''}" onclick="a1Tab('steps')">Steps</button>
