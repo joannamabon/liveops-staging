@@ -720,7 +720,7 @@ function closeAndResolve(id,reason){
 }
 function skipStep(id,i,reason){
   if(!skipped[id])skipped[id]={};
-  skipped[id][i]=reason;
+  skipped[id][i]={r:reason,t:Date.now()};
   const a=ACTIONS.find(x=>x.id===id);
   gl(id).push({t:ts(),text:`<strong>Step ${i+1} — not needed.</strong> Reason: ${reason}`,agent:true});
   if(a.steps.every((_,j)=>!!gc(id)[j]||(skipped[id]&&skipped[id][j]))){
@@ -1102,9 +1102,12 @@ function rd(id){
   const isClosed=!!m.closedAt;
   const tab=m.detailTab||'steps';
   if(m.showComplete===undefined)m.showComplete=false;
+  if(m.showRejected===undefined)m.showRejected=false;
   const showComplete=m.showComplete;
+  const showRejected=m.showRejected;
   const firstInc=a.steps.findIndex((s,i)=>!ch[i]&&!(skipped[id]&&skipped[id][i]));
-  const doneCount=a.steps.filter((s,i)=>ch[i]||(skipped[id]&&skipped[id][i])).length;
+  const doneCount=a.steps.filter((s,i)=>!!ch[i]).length;
+  const skippedCount=a.steps.filter((_,i)=>!!(skipped[id]&&skipped[id][i])).length;
   const tr=a.trigger.map(t=>`<tr class="${t.t?'tr-alert':''}"><td class="trigger-cell-icon">${t.t?'<icon-alert-triangle size="xs" aria-label="Exceeds threshold" style="color:var(--dt-color-content-warning-strong,var(--amber))"></icon-alert-triangle>':''}</td><td class="trigger-cell-rule">${t.r}</td><td class="trigger-cell-val">${t.v}</td><td class="trigger-cell-threshold">${t.t||''}</td></tr>`).join('');
   const itemsSection=a.orderItems?`<div class="section"><div class="section-label">Order items</div><div class="trigger-box">${a.orderItems.map(it=>`<div class="trigger-row"><span class="trigger-rule">${it.name}</span><span class="trigger-val">${it.qty}×</span></div>`).join('')}</div></div>`:'';
   const lh=renderLog(l);
@@ -1115,7 +1118,6 @@ function rd(id){
     const cardCls=(done||isSk)?'complete':(isActive?'active':'');
     const menuBtn=(!done&&!isSk)?`<button class="step-menu-btn" onclick="a1StepMenu(event,'${id}',${i})" aria-label="Step options"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="4" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="10" cy="16" r="1.5"/></svg></button>`:'';
     const hdr=`<div class="step-card-header"><div style="flex:1;min-width:0"><div class="step-title">${step.label}</div>${step.sub?`<div class="step-sub">${step.sub}</div>`:''}</div>${menuBtn}</div>`;
-    const skipTag=isSk?`<span class="step-skip-tag">Not needed — ${skipped[id][i]}</span>`:'';
     const singleActive=isActive&&step.btns.length===1;
     const btnsHtml=step.btns.map(b=>`<button class="step-cta-btn ${done||isSk?'outline':singleActive?'orange':isActive?'dark':'outline'}" onclick="hb(event,'${id}',${i},'${b.l}')">${b.i?b.i+' ':''}${b.l}</button>`).join('');
     let ctbl='';
@@ -1143,18 +1145,21 @@ function rd(id){
     if(m.ovNote&&i===0)ni+=`<div class="inline-note"><span class="no">Override applied</span>${m.ovNote}</div>`;
     if(m.compensation&&i===1&&id==='A5')ni+=`<div class="inline-note"><span class="nl">Compensation decision</span>${m.compensation.give?'Approved':'Not given'} — ${m.compensation.reason}</div>`;
     if(m.payBoostOffered&&i===0&&id==='A6')ni+=`<div class="inline-note"><span class="nl">Pay boost</span>Boost sent to offline couriers in N4</div>`;
-    const footer=`<div class="step-complete-footer">${done?`You completed this step ${minsAgo(ch[i])}`:`Assigned to ${a.assignedTo}`}</div>`;
-    return`<div class="step-card ${cardCls}">${hdr}${btnsHtml}${ctbl}${skipTag}${ni}${footer}</div>`;
+    const footerTxt=done?`You completed this step ${minsAgo(ch[i])}`:isSk?`You rejected this step ${minsAgo(skipped[id][i].t)}: ${skipped[id][i].r}`:`Assigned to ${a.assignedTo||''}`;
+    const footer=`<div class="step-complete-footer">${footerTxt}</div>`;
+    return`<div class="step-card ${cardCls}">${hdr}${btnsHtml}${ctbl}${ni}${footer}</div>`;
   }
 
   let tabContent;
   if(tab==='steps'){
     const incHtml=a.steps.map((s,i)=>{if(ch[i]||(skipped[id]&&skipped[id][i]))return'';return renderStep(s,i);}).join('');
-    const cmpHtml=a.steps.map((s,i)=>{if(!ch[i]&&!(skipped[id]&&skipped[id][i]))return'';return renderStep(s,i);}).join('');
+    const cmpHtml=a.steps.map((s,i)=>{if(!ch[i])return'';return renderStep(s,i);}).join('');
+    const skpHtml=a.steps.map((s,i)=>{if(!(skipped[id]&&skipped[id][i]))return'';return renderStep(s,i);}).join('');
     const pct=a.steps.length?(firstInc===-1?100:Math.round((firstInc+1)/a.steps.length*100)):0;
     const progressHtml=`<div class="progress-section"><div class="progress-label">Progress</div><div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div></div>`;
     const toggleHtml=doneCount>0?`<div class="step-toggle-row"><span class="step-toggle-label">${showComplete?'Hide complete steps':'View complete steps'}</span><div class="step-toggle${showComplete?' on':''}" onclick="rdToggleHide('${id}')"><div class="step-toggle-knob"></div></div></div>`:'';
-    tabContent=`<div class="step-list-wrap">${incHtml||''}${toggleHtml}${showComplete?cmpHtml:''}</div>${progressHtml}`;
+    const rejectToggleHtml=skippedCount>0?`<div class="step-toggle-row"><span class="step-toggle-label">${showRejected?'Hide rejected steps':'View rejected steps'}</span><div class="step-toggle${showRejected?' on':''}" onclick="rdToggleRejected('${id}')"><div class="step-toggle-knob"></div></div></div>`:'';
+    tabContent=`<div class="step-list-wrap">${incHtml||''}${toggleHtml}${showComplete?cmpHtml:''}${rejectToggleHtml}${showRejected?skpHtml:''}</div>${progressHtml}`;
   } else if(tab==='details'){
     tabContent=`<div class="detail-body">
       <div class="section"><div class="table-scroll" style="margin-top:0"><table class="trigger-table">${tr}</table></div></div>
@@ -1191,7 +1196,8 @@ function rd(id){
     ${tabContent}`;
 }
 function rdTab(id,tab){gm(id).detailTab=tab;if(sel===id)rd(id);}
-function rdToggleHide(id){const m=gm(id);m.showComplete=m.showComplete===false?true:false;if(sel===id){const sw=document.querySelector('.step-list-wrap');const st=sw?sw.scrollTop:0;rd(id);requestAnimationFrame(()=>{const s=document.querySelector('.step-list-wrap');if(s)s.scrollTop=st;});}}
+function rdToggleHide(id){const m=gm(id);m.showComplete=!m.showComplete;if(sel===id){const sw=document.querySelector('.step-list-wrap');const st=sw?sw.scrollTop:0;rd(id);requestAnimationFrame(()=>{const s=document.querySelector('.step-list-wrap');if(s)s.scrollTop=st;});}}
+function rdToggleRejected(id){const m=gm(id);m.showRejected=!m.showRejected;if(sel===id){const sw=document.querySelector('.step-list-wrap');const st=sw?sw.scrollTop:0;rd(id);requestAnimationFrame(()=>{const s=document.querySelector('.step-list-wrap');if(s)s.scrollTop=st;});}}
 
 /* ===== A1 ABUSE REPORT — STEP UX ===== */
 function rdA1(id){
@@ -1200,12 +1206,15 @@ function rdA1(id){
   const isClosed=!!m.closedAt;
   const tab=m.detailTab||'steps';
   if(m.showComplete===undefined)m.showComplete=false;
+  if(m.showRejected===undefined)m.showRejected=false;
   const showComplete=m.showComplete;
+  const showRejected=m.showRejected;
   if(!m.escalateChecks)m.escalateChecks=[false,false,false];
 
   // index of first step that is neither done nor skipped
   const firstInc=a.steps.findIndex((s,i)=>!ch[i]&&!(skipped[id]&&skipped[id][i]));
-  const doneCount=a.steps.filter((_,i)=>ch[i]||(skipped[id]&&skipped[id][i])).length;
+  const doneCount=a.steps.filter((_,i)=>!!ch[i]).length;
+  const skippedCount=a.steps.filter((_,i)=>!!(skipped[id]&&skipped[id][i])).length;
 
   function renderStep(step,i){
     const done=!!ch[i];
@@ -1215,24 +1224,21 @@ function rdA1(id){
     const cardCls=(done||isSk)?'complete':(isActive?'active':'');
     const menuBtn=(!done&&!isSk)?`<button class="step-menu-btn" onclick="a1StepMenu(event,'${id}',${i})" aria-label="Step options"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="4" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="10" cy="16" r="1.5"/></svg></button>`:'';
     const hdr=`<div class="step-card-header"><div style="flex:1;min-width:0"><div class="step-title">${step.label}</div><div class="step-sub">${step.sub}</div></div>${menuBtn}</div>`;
-    const skipTag=isSk?`<span class="step-skip-tag">Not needed — ${skipped[id][i]}</span>`:'';
+    const footerTxt=done?`You completed this step ${minsAgo(ch[i])}`:isSk?`You rejected this step ${minsAgo(skipped[id][i].t)}: ${skipped[id][i].r}`:`Assigned to ${a.assignedTo}`;
+    const footerHtml=`<div class="step-complete-footer">${footerTxt}</div>`;
     let inner=hdr;
 
     if(step.id==='call'){
       const btnCls=(done||isSk)?'outline':(isOrange?'orange':'outline');
       inner+=`<button class="step-cta-btn ${btnCls}" onclick="a1CallCourier('${id}',${i})"><icon-phone size="xs"></icon-phone> ${done?`Call ${a.courierName} again`:`Call ${a.courierName}`}</button>`;
-      inner+=done?`<div class="step-complete-footer">You completed this step ${minsAgo(ch[i])}</div>`:`<div class="step-complete-footer">Assigned to ${a.assignedTo}</div>`;
-      inner+=skipTag;
     } else if(step.id==='notes'){
       const btnLabel=done?'Update notes':'Save notes';
       const hasNotes=!!(m.notes&&m.notes.trim());
-      const btnCls=done?'outline':(hasNotes?'orange':'muted');
+      const btnCls=done||isSk?'outline':(hasNotes?'orange':'muted');
       const btnDisabledNotes=(!done&&!isSk&&!hasNotes)?' disabled':'';
       inner+=`<label class="step-notes-label">Notes from call with ${a.courierName}</label>
         <div class="step-notes-wrap"><textarea id="a1-notes-ta" class="step-notes-ta" rows="4" placeholder="Add notes here" oninput="a1NoteInput(this)">${m.notes||''}</textarea></div>
         <button id="a1-save-btn" class="step-cta-btn ${btnCls}"${btnDisabledNotes} onclick="a1SaveNotes('${id}',${i})">${btnLabel}</button>`;
-      inner+=done?`<div class="step-complete-footer">You completed this step ${minsAgo(ch[i])}</div>`:`<div class="step-complete-footer">Assigned to ${a.assignedTo}</div>`;
-      inner+=skipTag;
     } else if(step.id==='escalate'){
       const checks=m.escalateChecks;
       const labels=['Courier injured','Partner bad behaviour','Courier bad behaviour'];
@@ -1245,14 +1251,14 @@ function rdA1(id){
       }).join('');
       inner+=`<div class="step-cb-list">${cbRows}</div>
         <button class="step-cta-btn ${btnCls}"${btnDisabled} onclick="a1Escalate('${id}',${i})">${done?'View ticket':'Escalate to Safety Team'}</button>`;
-      inner+=done?`<div class="step-complete-footer">You completed this step ${minsAgo(ch[i])}</div>`:`<div class="step-complete-footer">Assigned to ${a.assignedTo}</div>`;
-      inner+=skipTag;
     }
+    inner+=footerHtml;
     return`<div class="step-card ${cardCls}">${inner}</div>`;
   }
 
   const incHtml=a.steps.map((s,i)=>{if(ch[i]||(skipped[id]&&skipped[id][i]))return'';return renderStep(s,i);}).join('');
-  const cmpHtml=a.steps.map((s,i)=>{if(!ch[i]&&!(skipped[id]&&skipped[id][i]))return'';return renderStep(s,i);}).join('');
+  const cmpHtml=a.steps.map((s,i)=>{if(!ch[i])return'';return renderStep(s,i);}).join('');
+  const skpHtml=a.steps.map((s,i)=>{if(!(skipped[id]&&skipped[id][i]))return'';return renderStep(s,i);}).join('');
   const tr=a.trigger.map(t=>`<tr class="${t.t?'tr-alert':''}"><td class="trigger-cell-icon">${t.t?'<icon-alert-triangle size="xs" style="color:var(--dt-color-content-warning-strong,var(--amber))"></icon-alert-triangle>':''}</td><td class="trigger-cell-rule">${t.r}</td><td class="trigger-cell-val">${t.v}</td><td class="trigger-cell-threshold">${t.t||''}</td></tr>`).join('');
   const lh=renderLog(l);
 
@@ -1261,7 +1267,8 @@ function rdA1(id){
     const pctA1=a.steps.length?(firstInc===-1?100:Math.round((firstInc+1)/a.steps.length*100)):0;
     const progressHtmlA1=`<div class="progress-section"><div class="progress-label">Progress</div><div class="progress-track"><div class="progress-fill" style="width:${pctA1}%"></div></div></div>`;
     const toggleHtml=doneCount>0?`<div class="step-toggle-row"><span class="step-toggle-label">${showComplete?'Hide complete steps':'View complete steps'}</span><div class="step-toggle${showComplete?' on':''}" onclick="a1ToggleHide('${id}')"><div class="step-toggle-knob"></div></div></div>`:'';
-    tabContent=`<div class="step-list-wrap">${incHtml||''}${toggleHtml}${showComplete?cmpHtml:''}</div>${progressHtmlA1}`;
+    const rejectToggleHtml=skippedCount>0?`<div class="step-toggle-row"><span class="step-toggle-label">${showRejected?'Hide rejected steps':'View rejected steps'}</span><div class="step-toggle${showRejected?' on':''}" onclick="a1ToggleRejected('${id}')"><div class="step-toggle-knob"></div></div></div>`:'';
+    tabContent=`<div class="step-list-wrap">${incHtml||''}${toggleHtml}${showComplete?cmpHtml:''}${rejectToggleHtml}${showRejected?skpHtml:''}</div>${progressHtmlA1}`;
   } else if(tab==='details'){
     tabContent=`<div class="detail-body">
       ${a.banner?`<pie-notification variant="error" heading="${a.banner.title}" position="full-width" style="margin-bottom:var(--dt-spacing-d)">${a.banner.text}</pie-notification>`:''}
@@ -1302,6 +1309,7 @@ function rdA1(id){
 function a1Tab(tab){gm('A1').detailTab=tab;if(sel==='A1')rdA1('A1');}
 function a1NoteInput(ta){const btn=document.getElementById('a1-save-btn');if(!btn)return;const has=ta.value.trim().length>0;btn.className='step-cta-btn '+(has?'orange':'muted');btn.disabled=!has;}
 function a1ToggleHide(id){const m=gm(id);m.showComplete=!m.showComplete;if(sel===id){const sw=document.querySelector('.step-list-wrap');const st=sw?sw.scrollTop:0;rdA1(id);requestAnimationFrame(()=>{const s=document.querySelector('.step-list-wrap');if(s)s.scrollTop=st;});}}
+function a1ToggleRejected(id){const m=gm(id);m.showRejected=!m.showRejected;if(sel===id){const sw=document.querySelector('.step-list-wrap');const st=sw?sw.scrollTop:0;rdA1(id);requestAnimationFrame(()=>{const s=document.querySelector('.step-list-wrap');if(s)s.scrollTop=st;});}}
 function a1StepMenu(e,id,i){e.stopPropagation();promptSkipStep(id,i);}
 
 function a1CallCourier(id,i){
