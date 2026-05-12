@@ -823,7 +823,7 @@ const ACTIONS=[
    ],
    log:[]},
 
-  {id:'A5',type:'System generated issue',severity:'standard',isZone:false,needsCall:true,time:'6 May, 10:58',openedAt:Date.now()-12*60*1000,assignedAt:Date.now()-12*60*1000,assignedBy:null,tags:[],assignedTo:'Agent Name',source:'System — automated detection',
+  {id:'A5',type:'Order missing',severity:'standard',appearsAfterClosed:1,isZone:false,needsCall:true,time:'6 May, 10:58',openedAt:Date.now()-12*60*1000,assignedAt:Date.now()-12*60*1000,assignedBy:null,tags:[],assignedTo:'Agent Name',source:'System — automated detection',
    desc:'Order #123458 at Burger Palace not collected by assigned courier.',orderId:'#123458',
    trigger:[{r:'Time since order ready',v:'11 min',t:'Threshold: >8 min'},{r:'Courier geofence',v:'Confirmed within range',t:null},{r:'Courier status',v:'Not arrived at pickup',t:null}],
    stats:[{v:'11m',l:'Since order ready'},{v:'0.8mi',l:'Courier distance'},{v:'0',l:'Prior incidents at Burger Palace'}],
@@ -996,7 +996,7 @@ function switchTab(tab,el){
   rl();
 }
 function toggleZone(){document.getElementById('zone-view').classList.toggle('active');document.getElementById('main-view').classList.toggle('hidden');}
-function fa(){return ACTIONS.filter(a=>!gm(a.id).closedAt&&(af==='all'||(af==='safety'&&a.severity==='safety')||(af==='zone'&&a.isZone)||(af==='call'&&a.needsCall))).sort((a,b)=>SO[a.severity]-SO[b.severity]);}
+function fa(){return ACTIONS.filter(a=>!gm(a.id).closedAt&&(a.appearsAfterClosed===undefined||CLOSED.length>=a.appearsAfterClosed)&&(af==='all'||(af==='safety'&&a.severity==='safety')||(af==='zone'&&a.isZone)||(af==='call'&&a.needsCall))).sort((a,b)=>SO[a.severity]-SO[b.severity]);}
 function setFilter(f,el){af=f;document.querySelectorAll('[data-filter]').forEach(c=>{c.isSelected=(c.dataset.filter===f);});rl();}
 function backToList(){activeTab='actions';document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('on'));const actTab=document.getElementById('tab-actions');if(actTab)actTab.classList.add('on');document.getElementById('main-view').classList.remove('showing-detail');sel=null;rl();}
 
