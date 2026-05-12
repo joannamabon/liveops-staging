@@ -1,0 +1,21 @@
+{
+  "name": "liveops-staging",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "esbuild": "^0.28.0"
+  },
+  "dependencies": {
+    "@justeattakeaway/pie-css": "^1.1.1",
+    "@justeattakeaway/pie-icons-webc": "^1.22.0",
+    "@justeattakeaway/pie-webc": "^0.10.6"
+  }
+}
