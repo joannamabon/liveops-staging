@@ -1053,7 +1053,6 @@ function rd(id){
   const ch=gc(id),l=gl(id),m=gm(id);
   const isClosed=!!m.closedAt;
   const tab=m.detailTab||'steps';
-  if(isClosed)m.showComplete=true;
   if(m.showComplete===undefined)m.showComplete=false;
   const showComplete=m.showComplete;
   const firstInc=a.steps.findIndex((s,i)=>!ch[i]&&!(skipped[id]&&skipped[id][i]));
@@ -1144,7 +1143,6 @@ function rdA1(id){
   const ch=gc(id),l=gl(id),m=gm(id);
   const isClosed=!!m.closedAt;
   const tab=m.detailTab||'steps';
-  if(isClosed)m.showComplete=true;
   if(m.showComplete===undefined)m.showComplete=false;
   const showComplete=m.showComplete;
   if(!m.escalateChecks)m.escalateChecks=[false,false,false];
