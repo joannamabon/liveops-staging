@@ -83,6 +83,7 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
 .f-btn{padding:6px 14px;font-size:12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:32px;}
 .f-btn.on{background:var(--dark);color:var(--light);border-color:var(--dark);}
 .list-scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:16px;display:flex;flex-direction:column;gap:12px;position:relative;z-index:1;}
+.list-section-label{font-size:12px;font-weight:700;color:var(--text2);padding:4px 0 0;letter-spacing:0.02em;text-transform:uppercase;}
 .list-scroll::-webkit-scrollbar{width:3px;}
 .list-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 /* ACTION CARDS */
@@ -548,6 +549,7 @@ function bsOvClick(e){if(e.target===document.getElementById('bs-ov'))mact('n');}
 window.addEventListener('pageshow',(e)=>{if(e.persisted){filterOpen=true;filterMyIssues=true;updateStatusChip();sel=null;document.getElementById('detail-panel').innerHTML='<div class="detail-empty">Select an issue to see details and steps</div>';document.getElementById('main-view').classList.remove('showing-detail');rl();}});
 document.addEventListener('DOMContentLoaded',()=>{
   bsTouchInit();
+  updateStatusChip();
   rl();
   // Auto-select first issue so the right panel is never empty on load
   if(!isMobile()){const firstIssue=fa()[0];if(firstIssue){sel=firstIssue.id;rl();rd(firstIssue.id);document.getElementById('main-view').classList.add('showing-detail');}}
@@ -814,7 +816,7 @@ const ACTIONS=[
    ],
    log:[]},
 
-  {id:'A4',type:'Split order required',severity:'standard',isZone:false,needsCall:false,time:'6 May, 10:58',openedAt:Date.now()-5*60*1000,assignedAt:Date.now()-4*60*1000,assignedBy:'Susan Hoff',tags:['heavyorder'],assignedTo:'Agent Name',source:'Partner — via Orderpad',
+  {id:'A4',type:'Split order required',severity:'standard',isZone:false,needsCall:false,assignedToMe:false,time:'6 May, 10:58',openedAt:Date.now()-5*60*1000,assignedAt:null,assignedBy:null,tags:['heavyorder'],assignedTo:null,source:'Partner — via Orderpad',
    desc:'Pizza Co. order #123457 — 13 items (~12kg). Flagged by partner via Orderpad.',orderId:'#123457',
    trigger:[{r:'Flagged by',v:'Partner via Orderpad',t:null},{r:'Estimated weight',v:'~12kg',t:'Single courier limit: 8kg'},{r:'Items',v:'13 items',t:null}],
    stats:[{v:'~12kg',l:'Est. weight'},{v:'13',l:'Items'},{v:'8kg',l:'Courier limit'}],
@@ -1017,30 +1019,44 @@ function showTypeFilters(){
   );
 }
 function toggleZone(){document.getElementById('zone-view').classList.toggle('active');document.getElementById('main-view').classList.toggle('hidden');}
-function fa(){return ACTIONS.filter(a=>!gm(a.id).closedAt&&(a.appearsAfterClosed===undefined||CLOSED.length>=a.appearsAfterClosed)&&(af==='all'||(af==='safety'&&a.severity==='safety')||(af==='zone'&&a.isZone)||(af==='call'&&a.needsCall))).sort((a,b)=>SO[a.severity]-SO[b.severity]);}
+function fa(){return ACTIONS.filter(a=>!gm(a.id).closedAt&&(a.appearsAfterClosed===undefined||CLOSED.length>=a.appearsAfterClosed)&&(!filterMyIssues||a.assignedToMe!==false)&&(af==='all'||(af==='safety'&&a.severity==='safety')||(af==='zone'&&a.isZone)||(af==='call'&&a.needsCall))).sort((a,b)=>SO[a.severity]-SO[b.severity]);}
 function setFilter(f){af=f;const btn=document.getElementById('type-filter-btn');if(btn)btn.classList.toggle('has-filter',f!=='all');rl();}
 function backToList(){document.getElementById('main-view').classList.remove('showing-detail');sel=null;rl();}
 function switchTab(tab){setStatusFilter(tab);}
 
 /* ===== LIST RENDER ===== */
+function renderOpenCard(a){
+  const m=gm(a.id);const cn=m.cardNote?`<div class="card-note">"${m.cardNote}"</div>`:'';
+  const tags=renderTags(a)+(a.isNew?ntag():'');
+  const footer=a.assignedToMe===false
+    ?`<span>Opened: ${minsAgo(a.openedAt||Date.now())}</span><span style="color:#F36805;font-weight:700">Unassigned</span>`
+    :`<span>Opened: ${minsAgo(a.openedAt||Date.now())}</span><span>${a.assignedBy?`Assigned to me by <strong>${a.assignedBy}</strong>: ${minsAgo(a.assignedAt||a.openedAt)}`:`Auto-assigned to me: ${minsAgo(a.assignedAt||a.openedAt)}`}</span>`;
+  return`<div class="action-card ${sel===a.id?'selected':''}" onclick="sa('${a.id}')">
+    <div class="card-top">
+      <div style="min-width:0"><div class="card-type">${a.type}</div>${a.orderId?`<div class="card-number">${a.orderId}</div>`:''}</div>
+      <button class="card-menu" onclick="event.stopPropagation()" aria-label="More options"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="4" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="10" cy="16" r="1.5"/></svg></button>
+    </div>
+    ${tags?`<div class="card-tags">${tags}</div>`:''}${cn}
+    <div class="card-footer">${footer}</div>
+  </div>`;
+}
 function rl(){
-  if(!filterOpen){renderClosedTab();return;}
   const items=fa();
-  document.getElementById('action-list-scroll').innerHTML=items.map(a=>{
-    const m=gm(a.id);const cn=m.cardNote?`<div class="card-note">"${m.cardNote}"</div>`:'';
-    const tags=renderTags(a)+(a.isNew?ntag():'');
-    return`<div class="action-card ${sel===a.id?'selected':''}" onclick="sa('${a.id}')">
-      <div class="card-top">
-        <div style="min-width:0">
-          <div class="card-type">${a.type}</div>
-          ${a.orderId?`<div class="card-number">${a.orderId}</div>`:''}
+  let html=items.map(renderOpenCard).join('');
+  if(!filterOpen){
+    const recent=CLOSED.filter(c=>(Date.now()-c.closedAt)<3600000);
+    if(recent.length){
+      html+=`<div class="list-section-label">Recently closed</div>`;
+      html+=recent.map((c,idx)=>`<div class="closed-card ${sel===c.action.id?'selected':''}" onclick="saC(${idx})">
+        <div class="closed-card-top"><div class="card-type">${c.action.type}</div><div class="closed-time">${timeAgo(c.closedAt)}</div></div>
+        <div class="closed-reason">Closed: ${c.closedReason}</div>
+        <div class="card-tags">${stag(c.action.severity)}${otag(c.action.orderId)}
+          <pie-button variant="ghost" size="xsmall" style="margin-left:auto" onclick="openClosedTicket(${idx},event)">Open</pie-button>
         </div>
-        <button class="card-menu" onclick="event.stopPropagation()" aria-label="More options"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="4" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="10" cy="16" r="1.5"/></svg></button>
-      </div>
-      ${tags?`<div class="card-tags">${tags}</div>`:''}${cn}
-      <div class="card-footer"><span>Opened: ${minsAgo(a.openedAt||Date.now())}</span><span>${a.assignedBy?`Assigned to me by <strong>${a.assignedBy}</strong>: ${minsAgo(a.assignedAt||a.openedAt)}`:`Auto-assigned to me: ${minsAgo(a.assignedAt||a.openedAt)}`}</span></div>
-    </div>`;
-  }).join('')||'<div style="padding:28px 16px;font-size:14px;color:var(--dt-color-content-disabled);text-align:center">No issues</div>';
+      </div>`).join('');
+    }
+  }
+  document.getElementById('action-list-scroll').innerHTML=html||'<div style="padding:28px 16px;font-size:14px;color:var(--dt-color-content-disabled);text-align:center">No issues</div>';
 }
 function renderClosedTab(){
   const now=Date.now();
