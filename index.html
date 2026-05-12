@@ -1224,10 +1224,12 @@ function rdA1(id){
       inner+=skipTag;
     } else if(step.id==='notes'){
       const btnLabel=done?'Update notes':'Save notes';
-      const btnCls=done?'outline':(isOrange?'orange':'dark');
+      const hasNotes=!!(m.notes&&m.notes.trim());
+      const btnCls=done?'outline':(hasNotes?'orange':'dark');
+      const btnDisabledNotes=(!done&&!isSk&&!hasNotes)?' disabled':'';
       inner+=`<label class="step-notes-label">Notes from call with Courier</label>
         <div class="step-notes-wrap"><textarea id="a1-notes-ta" class="step-notes-ta" rows="4" placeholder="Add notes here" oninput="a1NoteInput(this)">${m.notes||''}</textarea></div>
-        <button id="a1-save-btn" class="step-cta-btn ${btnCls}" onclick="a1SaveNotes('${id}',${i})">${btnLabel}</button>`;
+        <button id="a1-save-btn" class="step-cta-btn ${btnCls}"${btnDisabledNotes} onclick="a1SaveNotes('${id}',${i})">${btnLabel}</button>`;
       inner+=done?`<div class="step-complete-footer">You completed this step ${minsAgo(ch[i])}</div>`:`<div class="step-complete-footer">Assigned to ${a.assignedTo}</div>`;
       inner+=skipTag;
     } else if(step.id==='escalate'){
@@ -1297,7 +1299,7 @@ function rdA1(id){
 }
 
 function a1Tab(tab){gm('A1').detailTab=tab;if(sel==='A1')rdA1('A1');}
-function a1NoteInput(ta){}
+function a1NoteInput(ta){const btn=document.getElementById('a1-save-btn');if(!btn)return;const has=ta.value.trim().length>0;btn.className='step-cta-btn '+(has?'orange':'dark');btn.disabled=!has;}
 function a1ToggleHide(id){const m=gm(id);m.showComplete=!m.showComplete;if(sel===id){const sw=document.querySelector('.step-list-wrap');const st=sw?sw.scrollTop:0;rdA1(id);requestAnimationFrame(()=>{const s=document.querySelector('.step-list-wrap');if(s)s.scrollTop=st;});}}
 function a1StepMenu(e,id,i){e.stopPropagation();promptSkipStep(id,i);}
 
