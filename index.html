@@ -1117,7 +1117,7 @@ function rd(id){
     const hdr=`<div class="step-card-header"><div style="flex:1;min-width:0"><div class="step-title">${step.label}</div>${step.sub?`<div class="step-sub">${step.sub}</div>`:''}</div>${menuBtn}</div>`;
     const skipTag=isSk?`<span class="step-skip-tag">Not needed — ${skipped[id][i]}</span>`:'';
     const singleActive=isActive&&step.btns.length===1;
-    const btnsHtml=step.btns.map(b=>`<button class="step-cta-btn ${done||isSk?'outline':singleActive?'orange':'dark'}" onclick="hb(event,'${id}',${i},'${b.l}')">${b.i?b.i+' ':''}${b.l}</button>`).join('');
+    const btnsHtml=step.btns.map(b=>`<button class="step-cta-btn ${done||isSk?'outline':singleActive?'orange':isActive?'dark':'outline'}" onclick="hb(event,'${id}',${i},'${b.l}')">${b.i?b.i+' ':''}${b.l}</button>`).join('');
     let ctbl='';
     if(step.courierList){
       const crs=a[step.ck]||[];const isE=step.ck==='excessCouriers';const cs=m['c_'+step.ck]||new Set();
@@ -1219,7 +1219,7 @@ function rdA1(id){
     let inner=hdr;
 
     if(step.id==='call'){
-      const btnCls=(done||isSk)?'outline':(isOrange?'orange':'dark');
+      const btnCls=(done||isSk)?'outline':(isOrange?'orange':'outline');
       inner+=`<button class="step-cta-btn ${btnCls}" onclick="a1CallCourier('${id}',${i})"><icon-phone size="xs"></icon-phone> ${done?`Call ${a.courierName} again`:`Call ${a.courierName}`}</button>`;
       inner+=done?`<div class="step-complete-footer">You completed this step ${minsAgo(ch[i])}</div>`:`<div class="step-complete-footer">Assigned to ${a.assignedTo}</div>`;
       inner+=skipTag;
@@ -1237,7 +1237,7 @@ function rdA1(id){
       const checks=m.escalateChecks;
       const labels=['Courier injured','Partner bad behaviour','Courier bad behaviour'];
       const anyChecked=checks.some(c=>c);
-      const btnCls=done?'outline':(isOrange?'orange':'dark');
+      const btnCls=done?'outline':(isOrange?'orange':'outline');
       const btnDisabled=(!done&&!isSk&&!anyChecked)?' disabled':'';
       const cbRows=labels.map((lbl,ci)=>{
         const isChk=done||isSk||checks[ci];
