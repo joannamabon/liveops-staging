@@ -299,7 +299,7 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
 .step-toggle.on .step-toggle-knob{left:26px;}
 .step-list-wrap{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:16px;display:flex;flex-direction:column;gap:12px;}
 .step-list-wrap::-webkit-scrollbar{width:3px;}
-.step-list-wrap::-webkit-scrollbar-thumb{background:#E7E2DA;border-radius:2px;}
+.step-list-wrap::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 .step-card{background:#FFFFFF;border:1px solid #F0ECE6;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
 .step-card.active{background:#F6F3EF;border-color:#F36805;}
 .step-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
@@ -418,16 +418,23 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
     <div class="main-view" id="main-view">
       <div class="sidebar" id="sidebar">
         <button class="sb-icon sb-active" id="sb-issues" aria-label="Issues">
-          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="13"/><circle cx="12" cy="17" r="1" fill="currentColor" stroke="none"/></svg>
+          <icon-alert-circle size="xs"></icon-alert-circle>
         </button>
         <button class="sb-icon" aria-label="Orders">
-          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <icon-backpack size="xs"></icon-backpack>
         </button>
         <button class="sb-icon" onclick="toggleZone()" id="sb-stats" aria-label="Stats">
-          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 118 2.83"/><path d="M22 12A10 10 0 0012 2v10z"/></svg>
+          <icon-pie-chart size="xs"></icon-pie-chart>
         </button>
         <button class="sb-icon" aria-label="Pause">
-          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+          <icon-pause-circle size="xs"></icon-pause-circle>
+        </button>
+        <div style="flex:1"></div>
+        <button class="sb-icon" aria-label="Settings">
+          <icon-settings size="xs"></icon-settings>
+        </button>
+        <button class="sb-icon" aria-label="Help">
+          <icon-info-circle size="xs"></icon-info-circle>
         </button>
       </div>
       <div class="action-list">

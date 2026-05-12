@@ -23,3 +23,8 @@ import '@justeattakeaway/pie-icons-webc/dist/IconMap.js';
 import '@justeattakeaway/pie-icons-webc/dist/IconChevronUp.js';
 import '@justeattakeaway/pie-icons-webc/dist/IconIdCard.js';
 import '@justeattakeaway/pie-icons-webc/dist/IconWeight.js';
+import '@justeattakeaway/pie-icons-webc/dist/IconBackpack.js';
+import '@justeattakeaway/pie-icons-webc/dist/IconPieChart.js';
+import '@justeattakeaway/pie-icons-webc/dist/IconPauseCircle.js';
+import '@justeattakeaway/pie-icons-webc/dist/IconSettings.js';
+import '@justeattakeaway/pie-icons-webc/dist/IconInfoCircle.js';
