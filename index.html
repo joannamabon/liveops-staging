@@ -116,8 +116,9 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
 .dh-title{font-size:28px;font-weight:900;line-height:32px;color:rgba(0,0,0,0.76);margin-bottom:6px;}
 .dh-meta-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .dh-orderid{font-size:14px;font-weight:400;color:rgba(0,0,0,0.76);line-height:20px;flex-shrink:0;}
-.dh-menu-btn{background:none;border:none;cursor:pointer;font-size:20px;color:#3C4C4F;padding:4px 6px;border-radius:8px;margin:-2px -6px 0 0;line-height:1;flex-shrink:0;}
+.dh-menu-btn{background:none;border:none;cursor:pointer;color:#242E30;width:32px;height:32px;border-radius:8px;margin:-4px -8px 0 0;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;}
 .dh-menu-btn:hover{background:#F0ECE6;}
+.dh-menu-btn svg{display:block;}
 .dh-times{display:flex;flex-direction:column;font-size:12px;color:rgba(0,0,0,0.64);line-height:16px;margin-top:6px;gap:1px;}
 .detail-meta{display:flex;gap:var(--dt-spacing-b);align-items:center;flex-wrap:wrap;}
 .detail-body{flex:1;overflow-y:auto;padding:var(--dt-spacing-d) var(--dt-spacing-d) 32px;-webkit-overflow-scrolling:touch;}
@@ -1148,7 +1149,7 @@ function rd(id){
             ${renderTags(a)}
           </div>
         </div>
-        ${isClosed?'':`<button class="dh-menu-btn" onclick="promptCloseIncident('${id}')">⋮</button>`}
+        ${isClosed?'':`<button class="dh-menu-btn" onclick="promptCloseIncident('${id}')" aria-label="More options"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="4" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="10" cy="16" r="1.5"/></svg></button>`}
       </div>
       <div class="dh-times">
         <span>Opened: ${minsAgo(a.openedAt||Date.now())}</span>
@@ -1254,7 +1255,7 @@ function rdA1(id){
             ${renderTags(a)}
           </div>
         </div>
-        ${isClosed?'':`<button class="dh-menu-btn" onclick="promptCloseIncident('${id}')">⋮</button>`}
+        ${isClosed?'':`<button class="dh-menu-btn" onclick="promptCloseIncident('${id}')" aria-label="More options"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="4" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="10" cy="16" r="1.5"/></svg></button>`}
       </div>
       <div class="dh-times">
         <span>Opened: ${minsAgo(a.openedAt||Date.now())}</span>
