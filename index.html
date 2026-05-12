@@ -94,15 +94,10 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
 .card-desc{font-size:12px;color:var(--text2);margin-bottom:var(--dt-spacing-b);line-height:1.33;}
 .card-note{font-size:12px;color:var(--text);font-style:italic;margin-bottom:var(--dt-spacing-b);padding:var(--dt-spacing-a) var(--dt-spacing-b);background:var(--bg2);border-radius:var(--radius);border-left:2px solid var(--border2);}
 .card-tags{display:flex;gap:4px;flex-wrap:wrap;align-items:center;}
-/* Tags — Figma spec exact */
-/* Base (job-type / secondary) tags: 18px, 12px text */
-.ptag{display:inline-flex;align-items:center;gap:4px;border:1px solid #E7E2DA;border-radius:12px;padding:1px 4px 1px 1px;height:18px;white-space:nowrap;flex-shrink:0;}
-.ptag-icon-wrap{width:16px;height:16px;border-radius:50%;background:#F0ECE6;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#242E30;}
-.ptag-label{font-size:12px;font-weight:400;line-height:1;color:#242E30;}
-/* Primary (severity/urgency) tags: 24px, 14px text — Figma Tag component, larger */
-.ptag.ptag-safety,.ptag.ptag-urgent{height:24px;padding:1px 8px 1px 1px;border-radius:12px;}
-.ptag.ptag-safety .ptag-icon-wrap,.ptag.ptag-urgent .ptag-icon-wrap{width:22px;height:22px;}
-.ptag.ptag-safety .ptag-label,.ptag.ptag-urgent .ptag-label{font-size:14px;line-height:20px;}
+/* Tags — Figma spec: ALL tags are Size Large (24px, 14px text, 22×22 icon) */
+.ptag{display:inline-flex;align-items:center;gap:4px;border:1px solid #E7E2DA;border-radius:12px;padding:1px 8px 1px 1px;height:24px;white-space:nowrap;flex-shrink:0;}
+.ptag-icon-wrap{width:22px;height:22px;border-radius:50%;background:#F0ECE6;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#242E30;}
+.ptag-label{font-size:14px;font-weight:400;line-height:20px;color:#242E30;}
 /* DETAIL PANEL */
 .detail-panel{position:absolute;inset:0;display:none;flex-direction:column;overflow:hidden;background:var(--bg);z-index:10;}
 .main-view.showing-detail .detail-panel{display:flex;}
