@@ -431,8 +431,8 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
           <h1 class="list-title">Issue list</h1>
           <div class="list-sub" id="list-sub">Last updated: just now</div>
           <div class="list-filter-row">
-            <button class="list-filter-chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My issues<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-            <button class="list-filter-chip" id="status-filter-chip" onclick="toggleStatusFilter()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span id="status-chip-label">Open</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <button class="list-filter-chip active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My issues<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <button class="list-filter-chip active" id="status-filter-chip" onclick="showStatusPicker()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span id="status-chip-label">Open</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
             <button class="list-filter-icon" id="type-filter-btn" onclick="showTypeFilters()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="9" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="16" cy="12" r="2" fill="currentColor" stroke="none"/><circle cx="7" cy="18" r="2" fill="currentColor" stroke="none"/></svg></button>
           </div>
         </div>
@@ -984,8 +984,16 @@ function bsTouchInit(){
 }
 
 /* ===== FILTER / NAV ===== */
-function toggleStatusFilter(){
-  activeTab=(activeTab==='actions')?'closed':'actions';
+function showStatusPicker(){
+  const opts=[{k:'actions',l:'Open'},{k:'closed',l:'Closed'}];
+  mcb=null;
+  showM('','','Issue status','','',
+    `<div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">${opts.map(o=>`<button onclick="setStatusFilter('${o.k}');mact('n')" style="padding:12px 16px;font-size:14px;font-weight:${activeTab===o.k?700:400};border:1px solid ${activeTab===o.k?'var(--dark)':'var(--border)'};border-radius:8px;background:${activeTab===o.k?'var(--dark)':'transparent'};color:${activeTab===o.k?'var(--light)':'var(--text)'};font-family:inherit;cursor:pointer;text-align:left">${o.l}${activeTab===o.k?'&nbsp;&nbsp;✓':''}</button>`).join('')}</div>`,
+    [{l:'Cancel',k:'n',c:'n'}]
+  );
+}
+function setStatusFilter(tab){
+  activeTab=tab;
   updateStatusChip();
   sel=null;
   document.getElementById('detail-panel').innerHTML='<div class="detail-empty">Select an issue to see details and steps</div>';
@@ -994,7 +1002,7 @@ function toggleStatusFilter(){
 }
 function updateStatusChip(){
   const lbl=document.getElementById('status-chip-label');if(lbl)lbl.textContent=(activeTab==='closed')?'Closed':'Open';
-  const chip=document.getElementById('status-filter-chip');if(chip)chip.classList.toggle('active',activeTab==='closed');
+  const chip=document.getElementById('status-filter-chip');if(chip)chip.classList.toggle('active',true);
 }
 function showTypeFilters(){
   const opts=[{f:'all',l:'All issues'},{f:'safety',l:'Safety only'},{f:'zone',l:'Zone issues'},{f:'call',l:'Needs call'}];
@@ -1008,6 +1016,7 @@ function toggleZone(){document.getElementById('zone-view').classList.toggle('act
 function fa(){return ACTIONS.filter(a=>!gm(a.id).closedAt&&(a.appearsAfterClosed===undefined||CLOSED.length>=a.appearsAfterClosed)&&(af==='all'||(af==='safety'&&a.severity==='safety')||(af==='zone'&&a.isZone)||(af==='call'&&a.needsCall))).sort((a,b)=>SO[a.severity]-SO[b.severity]);}
 function setFilter(f){af=f;const btn=document.getElementById('type-filter-btn');if(btn)btn.classList.toggle('has-filter',f!=='all');rl();}
 function backToList(){activeTab='actions';updateStatusChip();document.getElementById('main-view').classList.remove('showing-detail');sel=null;rl();}
+function switchTab(tab){setStatusFilter(tab);}
 
 /* ===== LIST RENDER ===== */
 function rl(){
