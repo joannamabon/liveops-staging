@@ -43,7 +43,8 @@
 html,body{height:100%;overflow:hidden;}
 body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),sans-serif;background:#FDFDFB;color:var(--text);font-size:14px;display:flex;flex-direction:column;}
 .shell{display:flex;flex-direction:column;height:100%;position:relative;}
-.topnav{display:flex;align-items:center;gap:8px;padding:0 16px;height:52px;background:#FFFFFF;border-bottom:1px solid #E7E2DA;flex-shrink:0;}
+.topnav{display:flex;align-items:center;height:64px;background:#FFFFFF;border-bottom:1px solid #E7E2DA;flex-shrink:0;padding-right:16px;}
+.topnav-icon-area{width:72px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
 .logo{font-weight:900;font-size:16px;color:var(--dark);}
 .partner-pill{font-size:12px;padding:3px 8px;border-radius:4px;background:var(--bg2);color:var(--text2);border:1px solid var(--border);}
 .nav-spacer{flex:1;}
@@ -238,7 +239,7 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
 .modal-note-sub{font-size:12px;color:var(--text2);margin-top:6px;text-align:center;}
 /* TOPNAV additions */
 .jet-icon{flex-shrink:0;}
-.topnav-sep{width:1px;height:20px;background:#FF8000;flex-shrink:0;margin:0 4px;}
+.topnav-sep{width:1px;height:32px;background:#FF8000;flex-shrink:0;margin-right:16px;}
 .topnav-partner{font-size:20px;font-weight:900;line-height:24px;color:rgba(0,0,0,0.76);}
 .burger-btn{width:36px;height:36px;border-radius:var(--radius);border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0;flex-shrink:0;}
 .burger-line{display:block;width:18px;height:1.5px;background:var(--text);border-radius:1px;}
@@ -248,7 +249,7 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
 .sb-icon:hover{background:#F0ECE6;}
 .sb-icon.sb-active{color:#F36805;}
 /* LIST HEADER */
-.list-header{padding:16px;flex-shrink:0;border-bottom:1px solid #F0ECE6;display:flex;flex-direction:column;justify-content:flex-end;min-height:120px;gap:8px;}
+.list-header{padding:16px;flex-shrink:0;border-bottom:1px solid #F0ECE6;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;}
 .list-header-row{display:flex;align-items:center;justify-content:space-between;}
 .list-title{font-size:28px;font-weight:900;line-height:32px;color:rgba(0,0,0,0.76);}
 .list-sub{font-size:12px;font-weight:400;line-height:16px;color:rgba(0,0,0,0.64);margin-top:0;}
@@ -257,7 +258,7 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
 .online-dot{display:none;}
 /* CARD updates */
 .card-number{font-size:12px;color:rgba(0,0,0,0.64);margin-bottom:0;margin-top:2px;line-height:16px;}
-.card-footer{font-size:12px;color:rgba(0,0,0,0.64);margin-top:0;line-height:16px;}
+.card-footer{font-size:12px;color:rgba(0,0,0,0.64);margin-top:0;line-height:18px;display:flex;flex-direction:column;gap:1px;}
 .card-menu{background:none;border:none;cursor:pointer;color:var(--text2);padding:4px 6px;line-height:1;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;margin:-4px -4px 0 0;}
 .card-menu:hover{background:var(--bg2);}
 /* Per-tag colour variants — kept for future use, all inherit base .ptag style */
@@ -311,12 +312,19 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
 .step-cta-btn.outline{background:transparent;border:1.5px solid #E7E2DA;color:#242E30;}
 .step-cta-btn:disabled{opacity:0.4;cursor:not-allowed;}
 .step-complete-footer{font-size:12px;font-weight:400;color:rgba(0,0,0,0.64);line-height:16px;}
+.list-filter-row{display:flex;gap:8px;align-items:center;}
+.list-filter-chip{display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(0,0,0,0.2);border-radius:20px;padding:5px 10px 5px 8px;font-size:14px;font-weight:500;background:var(--bg);cursor:pointer;color:var(--text);font-family:inherit;white-space:nowrap;}
+.list-filter-chip svg{flex-shrink:0;}
+.list-filter-icon{border:1px solid rgba(0,0,0,0.2);border-radius:8px;padding:5px 7px;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;margin-left:auto;}
+.progress-section{padding:var(--dt-spacing-d) var(--dt-spacing-d) var(--dt-spacing-e);border-top:1px solid var(--border);}
+.progress-label{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.progress-track{width:100%;height:4px;background:#E7E2DA;border-radius:2px;overflow:hidden;}
+.progress-fill{height:4px;background:var(--dt-color-interactive-brand,#F36805);border-radius:2px;transition:width 0.4s ease;}
 .step-skip-tag{font-size:12px;color:rgba(0,0,0,0.64);padding:4px 8px;background:#F0ECE6;border-radius:8px;display:inline-block;margin-top:2px;}
 .status-chip{display:inline-flex;align-items:center;gap:4px;border:1px solid #E7E2DA;border-radius:16px;padding:0 12px;font-size:14px;font-weight:700;color:#242E30;height:32px;cursor:pointer;background:transparent;white-space:nowrap;font-family:inherit;}
 /* DESKTOP */
 @media(min-width:768px){
-  .topnav{padding:0 24px;height:64px;}
-  .logo{font-size:15px;font-weight:900;}
+  .logo{font-size:16px;font-weight:900;}
   .summary-row{grid-template-columns:repeat(4,1fr);gap:var(--dt-spacing-c);}
   .sla-grid{grid-template-columns:1fr 1fr;}
   .zone-view{padding:24px;}
@@ -350,10 +358,7 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
 }
 /* Mobile — PIE app shell patterns */
 @media(max-width:767px){
-  .topnav{height:52px;padding:0 16px;}
-  .topnav-partner{font-size:16px;}
-  .sidebar{width:56px;padding:16px 4px;}
-  .sb-icon{width:44px;height:44px;}
+  .detail-panel{left:72px;}
   /* Close issue moves to sticky bottom action bar on mobile */
   .detail-header-close{display:none!important;}
   .detail-action-bar{display:flex;gap:var(--dt-spacing-b);padding-bottom:max(var(--dt-spacing-c),env(safe-area-inset-bottom));}
@@ -366,7 +371,9 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
 <body>
 <div class="shell">
   <div class="topnav">
-    <svg class="jet-icon" width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="6" fill="#FF8000"/><path d="M16 5L7 13.5V27h6v-8h6v8h6V13.5L16 5z" fill="#fff"/></svg>
+    <div class="topnav-icon-area">
+      <svg class="jet-icon" width="36" height="38" viewBox="0 0 36 38" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M35.6686 18.3903C35.5545 18.0878 33.9968 15.1209 31.1064 11.3987C31.0334 11.3084 30.9872 11.1983 30.9733 11.0816C30.7994 8.91527 30.5084 6.76067 30.1018 4.62782C30.0557 4.41359 29.9459 4.21958 29.7876 4.073C29.6293 3.92643 29.4305 3.83463 29.2191 3.81047L26.2115 3.42959C26.1851 3.4271 26.1586 3.4271 26.1322 3.42959C25.9641 3.42959 25.8029 3.49848 25.684 3.62111C25.5652 3.74373 25.4984 3.91005 25.4984 4.08347V5.15909C25.4984 5.1695 25.4944 5.17948 25.4872 5.18683C25.4801 5.19419 25.4704 5.19833 25.4604 5.19833C25.451 5.19823 25.4421 5.19476 25.435 5.18852C23.5534 3.42923 21.5221 1.84811 19.3658 0.464265C18.9262 0.160467 18.4086 -0.0011708 17.8795 1.29857e-05C17.3502 -0.00166865 16.8325 0.160012 16.3931 0.464265C6.02637 7.06514 0.318515 17.8018 0.0982501 18.3903C0.0332111 18.5318 -0.000355653 18.6865 2.84156e-06 18.8431C0.00026492 19.0789 0.0765457 19.3079 0.216833 19.494C0.35712 19.6802 0.553445 19.8129 0.77489 19.8713L3.76193 20.4631C3.95843 20.5197 4.13396 20.6358 4.26587 20.7963C4.39778 20.9569 4.48002 21.1545 4.50195 21.3638C4.52731 21.9081 5.09144 34.0588 5.79977 37.2104C5.8581 37.4368 5.9873 37.6369 6.16726 37.7797C6.34723 37.9225 6.56789 37.9999 6.79492 38H6.81711C8.56021 37.9542 10.1559 37.9248 11.88 37.9003H12.0226C12.0667 37.9003 12.1103 37.8913 12.151 37.8739C12.1916 37.8564 12.2286 37.8309 12.2596 37.7987C12.2907 37.7665 12.3153 37.7283 12.332 37.6862C12.3487 37.6442 12.3572 37.5992 12.357 37.5537V37.5456C12.2873 36.4846 12.1367 34.0588 12.0147 31.4972C12.0147 31.4335 12.0147 31.3534 12.0036 31.288C11.9982 31.1815 11.9676 31.0781 11.9146 30.9867C11.8616 30.8952 11.7877 30.8185 11.6994 30.7632C11.2445 30.483 10.8636 30.0916 10.5902 29.6234C10.3169 29.1553 10.1596 28.6249 10.1322 28.0791C9.9737 23.8191 9.89606 18.8937 10.1227 15.0408C10.133 14.8819 10.2023 14.7333 10.3161 14.6257C10.4299 14.5181 10.5795 14.4598 10.7338 14.463C10.8881 14.4661 11.0353 14.5305 11.1449 14.6426C11.2545 14.7548 11.318 14.9061 11.3222 15.0653C11.3222 15.0817 11.3222 15.098 11.3222 15.1143C11.1749 17.6824 11.1638 20.7197 11.2145 23.7161C11.2161 23.8127 11.2362 23.908 11.2736 23.9966C11.311 24.0852 11.3649 24.1653 11.4323 24.2324C11.4997 24.2995 11.5792 24.3522 11.6664 24.3876C11.7535 24.423 11.8466 24.4403 11.9402 24.4386C12.0339 24.4369 12.1263 24.4162 12.2122 24.3776C12.298 24.3391 12.3757 24.2834 12.4408 24.2139C12.5058 24.1444 12.5569 24.0623 12.5912 23.9724C12.6255 23.8825 12.6423 23.7865 12.6406 23.6899C12.5868 20.6739 12.601 17.6171 12.7516 15.0408C12.7547 14.8765 12.821 14.7202 12.9359 14.6063C13.0507 14.4924 13.2048 14.4302 13.364 14.4335C13.5233 14.4368 13.6748 14.5051 13.7852 14.6236C13.8956 14.7421 13.9559 14.901 13.9527 15.0653V15.1143C13.8054 17.6694 13.7943 20.6886 13.845 23.6687C13.8479 23.8638 13.9259 24.0497 14.0617 24.1855C14.1975 24.3213 14.38 24.3959 14.5691 24.3928C14.7583 24.3898 14.9385 24.3094 15.0701 24.1693C15.2018 24.0292 15.2741 23.8409 15.2711 23.6458C15.2189 20.6429 15.2331 17.5974 15.3837 15.0392C15.3868 14.8748 15.4531 14.7185 15.568 14.6047C15.6828 14.4908 15.8368 14.4286 15.9961 14.4319C16.1554 14.4351 16.3069 14.5035 16.4173 14.622C16.5277 14.7405 16.588 14.8994 16.5848 15.0637C16.5848 15.08 16.5848 15.0964 16.5848 15.1127C16.3709 18.8594 16.4406 23.6 16.5848 27.7603C16.5848 27.7603 16.5848 27.7963 16.5848 27.7995C16.5848 27.8028 16.5848 27.842 16.5848 27.8633V27.9042C16.5853 28.4438 16.4582 28.9755 16.2147 29.4532C15.9712 29.9308 15.6185 30.3401 15.1872 30.6455C15.1105 30.7 15.0469 30.7717 15.0011 30.8553C14.9552 30.9388 14.9284 31.032 14.9225 31.1278C14.9225 31.1278 14.848 31.7669 15.1222 34.8614C15.249 36.2133 15.3472 37.15 15.3916 37.5733C15.4016 37.6525 15.4394 37.7251 15.4978 37.7775C15.5562 37.8299 15.6311 37.8585 15.7085 37.8578H15.9874C16.5626 37.8578 17.1553 37.8578 17.7717 37.8578H18.0031H20.2406L21.9361 37.8725C22.014 37.8731 22.0893 37.8441 22.1478 37.791C22.2062 37.7379 22.2437 37.6645 22.2531 37.5848C22.6445 33.8757 22.7364 31.7914 22.7364 31.7914C22.7342 31.7026 22.7009 31.6175 22.6427 31.552C22.5844 31.4865 22.5051 31.4449 22.4194 31.4351L20.3594 31.1425C20.2227 31.1251 20.0941 31.0664 19.9895 30.974C19.8849 30.8815 19.8091 30.7593 19.7715 30.6226C19.7456 30.5159 19.7365 30.4055 19.7446 30.2957C20.5797 17.9326 24.5318 13.7657 24.5318 13.7657C24.5895 13.7016 24.6538 13.644 24.7235 13.5941C24.831 13.5127 24.961 13.4691 25.0943 13.4699C25.2216 13.47 25.3459 13.5097 25.4511 13.5837C25.5562 13.6578 25.6373 13.7628 25.6838 13.8851C25.713 13.9816 25.73 14.0816 25.7345 14.1826C26.0768 18.0682 25.9088 24.6822 25.6981 29.8413C25.519 34.2206 25.3035 37.6583 25.3035 37.6583C25.3033 37.6918 25.3095 37.7249 25.3217 37.7558C25.334 37.7867 25.352 37.8149 25.3749 37.8386C25.3977 37.8623 25.4248 37.8811 25.4547 37.8939C25.4846 37.9067 25.5167 37.9134 25.5491 37.9134C26.671 37.933 27.7755 37.9559 28.9466 37.9869H28.9687C29.1958 37.9869 29.4164 37.9094 29.5964 37.7666C29.7764 37.6238 29.9056 37.4237 29.9639 37.1974C30.6738 34.0457 31.2316 21.895 31.2617 21.3507C31.2845 21.1408 31.3678 20.9427 31.5009 20.7822C31.6339 20.6216 31.8106 20.5059 32.0081 20.45L34.9951 19.8582C35.2166 19.7998 35.4129 19.6671 35.5532 19.4809C35.6935 19.2948 35.7697 19.0658 35.77 18.83C35.7668 18.6777 35.7322 18.5278 35.6686 18.3903Z" fill="#FF8000"/></svg>
+    </div>
     <span class="topnav-sep"></span>
     <span class="topnav-partner" id="topnav-partner">Fleetlery</span>
     <div class="nav-spacer"></div>
@@ -410,11 +417,13 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
       </div>
       <div class="action-list">
         <div class="list-header">
-          <div class="list-header-row">
-            <h1 class="list-title">Issue list</h1>
-            <button class="online-badge"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" style="flex-shrink:0"><circle cx="12" cy="12" r="10" fill="#2B7836"/><path d="M8 12l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Online<svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
-          </div>
+          <h1 class="list-title">Issue list</h1>
           <div class="list-sub" id="list-sub">Last updated: just now</div>
+          <div class="list-filter-row">
+            <button class="list-filter-chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>My issues<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <button class="list-filter-chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Open<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+            <button class="list-filter-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="9" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="16" cy="12" r="2" fill="currentColor" stroke="none"/><circle cx="7" cy="18" r="2" fill="currentColor" stroke="none"/></svg></button>
+          </div>
         </div>
         <div class="tab-bar">
           <button class="tab-btn on" id="tab-actions" onclick="switchTab('actions',this)">My issues <span class="tab-count" id="count-pill">6</span></button>
@@ -530,9 +539,13 @@ window.addEventListener('pageshow',(e)=>{if(e.persisted){activeTab='actions';doc
 document.addEventListener('DOMContentLoaded',()=>{
   bsTouchInit();
   rl();
+  // Auto-select first issue so the right panel is never empty on load
+  if(!isMobile()){const firstIssue=fa()[0];if(firstIssue){sel=firstIssue.id;rl();rd(firstIssue.id);document.getElementById('main-view').classList.add('showing-detail');}}
   document.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&document.getElementById('bs-ov').classList.contains('open'))mact('n');});
   // Update "last updated" timestamp every 30s
   setInterval(()=>{const el=document.getElementById('list-sub');if(el)el.textContent='Last updated: just now';},30000);
+  // Re-render every 60s so all "X mins ago" timers stay accurate
+  setInterval(()=>{rl();if(sel)rd(sel);},60000);
 });
 
 function callM(name,mandatory,cb){
@@ -740,11 +753,11 @@ const RETURN_NOT_NEEDED_STEPS=[
 
 /* ===== ACTIONS DATA ===== */
 const ACTIONS=[
-  {id:'A6',type:'Zone undersupply',severity:'urgent',isZone:true,needsCall:true,time:'6 May, 10:58',openedAt:Date.now()-31*60*1000,tags:['urgent','zone'],assignedTo:'Agent Name',source:'System — automated detection',
+  {id:'A6',type:'Zone undersupply',severity:'urgent',isZone:true,needsCall:true,time:'6 May, 10:58',openedAt:Date.now()-28*60*1000,assignedAt:Date.now()-27*60*1000,assignedBy:null,tags:['urgent','zone'],assignedTo:'Agent Name',source:'System — automated detection',
    desc:'Zone N4 — 6 delayed orders, only 3 couriers active.',orderId:null,
    trigger:[{r:'Delayed orders in zone',v:'6',t:'Threshold: >3'},{r:'Active couriers',v:'3',t:'Expected: 8–10'},{r:'Avg delay',v:'14 min',t:'SLA limit: 5 min'}],
    stats:[{v:'6',l:'Delayed orders'},{v:'14m',l:'Avg delay'},{v:'3/10',l:'Couriers active'}],
-   banner:{type:'zone',title:'Zone undersupply',text:'Supply is not meeting demand. Bring couriers online before considering a zone pause — pausing orders should be a last resort.'},
+   orderId:'#123400',banner:{type:'zone',title:'Zone undersupply',text:'Supply is not meeting demand. Bring couriers online before considering a zone pause — pausing orders should be a last resort.'},
    steps:[
      {label:'Call offline couriers to start their shifts',sub:'All 3 must be called before this step completes',btns:[{l:'Offer pay boost',c:'boost',i:''}],courierList:true,ck:'offlineCouriers',allCalls:true},
      {label:'Monitor zone for 10 minutes',sub:'Allow time for couriers to come online after calls',btns:[{l:'Start 10 min monitor',c:'',i:''}]},
@@ -753,20 +766,20 @@ const ACTIONS=[
    offlineCouriers:[{name:'Kwame A.',shifts:'12 this month',lastActive:'Yesterday'},{name:'Fatima O.',shifts:'8 this month',lastActive:'2 days ago'},{name:'Dmitri V.',shifts:'15 this month',lastActive:'This morning'}],
    log:[]},
 
-  {id:'A1',type:'Abuse report',severity:'safety',isZone:false,needsCall:true,time:'6 May, 10:58',openedAt:Date.now()-23*60*1000,tags:['urgent','safety'],assignedTo:'Agent Name',source:'Courier — reported via app',
+  {id:'A1',type:'Abuse report',severity:'safety',isZone:false,needsCall:true,time:'6 May, 10:58',openedAt:Date.now()-32*60*1000,assignedAt:Date.now()-31*60*1000,assignedBy:null,tags:['safety','urgent'],assignedTo:'Agent Name',source:'Courier — reported via app',
    courierName:'Sarah Mitsch',
-   desc:'Courier Sarah Mitsch flagged verbal abuse at 88 West St.',orderId:'#A-2844',
+   desc:'Courier Sarah Mitsch flagged verbal abuse at 88 West St.',orderId:'#123455',
    trigger:[{r:'Incident type',v:'Verbal abuse',t:null},{r:'Raised by',v:'Courier via app',t:null},{r:'Time since raised',v:'2 min',t:null}],
    stats:[{v:'2m',l:'Time since raised'},{v:'3',l:'Orders — this customer'},{v:'0',l:'Prior flags — Sarah M.'}],
    banner:{type:'safety',title:'Safety incident',text:'Contact the courier before taking any action on the order.'},
    steps:[
      {id:'call',label:'Call Courier',sub:'Find out what happened'},
-     {id:'notes',label:'Review notes',sub:'Are they easy to understand?'},
+     {id:'notes',label:'Record notes here',sub:'Bullet points in plain language'},
      {id:'escalate',label:'Escalate to Safety Team',sub:'Escalate if any have been met'},
    ],log:[]},
 
-  {id:'A2',type:'Unexpected Partner closure',severity:'urgent',isZone:false,needsCall:true,time:'6 May, 10:58',openedAt:Date.now()-18*60*1000,tags:['urgent','manyorders'],assignedTo:'Agent Name',source:'System — automated detection',
-   desc:'Cafe Grill appears closed. Courier arrived and no one answered.',orderId:'#A-2846',
+  {id:'A2',type:'Unexpected Partner closure',severity:'urgent',isZone:false,needsCall:true,time:'6 May, 10:58',openedAt:Date.now()-33*60*1000,assignedAt:Date.now()-32*60*1000,assignedBy:'Me',tags:['urgent','manyorders'],assignedTo:'Agent Name',source:'System — automated detection',
+   desc:'Cafe Grill appears closed. Courier arrived and no one answered.',orderId:'#123456',
    trigger:[{r:'Courier report',v:'Partner unresponsive',t:null},{r:'Time courier waiting',v:'8 min',t:'Expected: <2 min'},{r:'Orders affected',v:'1',t:null}],
    stats:[{v:'8m',l:'Courier waiting'},{v:'1',l:'Orders affected'},{v:'0',l:'Previous closures'}],
    banner:null,
@@ -776,8 +789,8 @@ const ACTIONS=[
      {label:'Cancel order and trigger downstream actions',sub:'Customer refunded, courier compensated, partner notified',btns:[{l:'Cancel & trigger actions',c:'',i:'<icon-close size="xs"></icon-close>'}]},
    ],log:[]},
 
-  {id:'A3',type:'Return required',severity:'standard',isZone:false,needsCall:false,time:'6 May, 10:58',openedAt:Date.now()-9*60*1000,tags:['agerestricted'],assignedTo:'Agent Name',source:'System — automated detection',
-   desc:'Courier waiting 6 min at 45 Oak Ave — system flagged: return needed (alcohol restriction).',orderId:'#A-2842',
+  {id:'A3',type:'Return required',severity:'standard',isZone:false,needsCall:false,time:'6 May, 10:58',openedAt:Date.now()-33*60*1000,assignedAt:Date.now()-32*60*1000,assignedBy:'Susan Hoff',tags:['agerestricted'],assignedTo:'Agent Name',source:'System — automated detection',
+   desc:'Courier waiting 6 min at 45 Oak Ave — system flagged: return needed (alcohol restriction).',orderId:'#123470',
    trigger:[{r:'Courier wait time',v:'6 min',t:'Threshold: >5 min'},{r:'Item restriction',v:'Alcohol — age verification required',t:null},{r:'App notification',v:'Sent — no response',t:null}],
    stats:[{v:'6m',l:'Courier waiting'},{v:'£38.50',l:'Order value'},{v:'Alcohol',l:'Restriction'}],
    banner:{type:'safety',title:'Return required',text:'Alcohol restriction prevents leaving unattended. Confirm or override below.'},
@@ -788,8 +801,8 @@ const ACTIONS=[
    ],
    log:[]},
 
-  {id:'A4',type:'Split order required',severity:'standard',isZone:false,needsCall:false,time:'6 May, 10:58',openedAt:Date.now()-5*60*1000,tags:['heavyorder'],assignedTo:'Agent Name',source:'Partner — via Orderpad',
-   desc:'Pizza Co. order #A-2843 — 13 items (~12kg). Flagged by partner via Orderpad.',orderId:'#A-2843',
+  {id:'A4',type:'Split order required',severity:'standard',isZone:false,needsCall:false,time:'6 May, 10:58',openedAt:Date.now()-5*60*1000,assignedAt:Date.now()-4*60*1000,assignedBy:'Susan Hoff',tags:['heavyorder'],assignedTo:'Agent Name',source:'Partner — via Orderpad',
+   desc:'Pizza Co. order #123457 — 13 items (~12kg). Flagged by partner via Orderpad.',orderId:'#123457',
    trigger:[{r:'Flagged by',v:'Partner via Orderpad',t:null},{r:'Estimated weight',v:'~12kg',t:'Single courier limit: 8kg'},{r:'Items',v:'13 items',t:null}],
    stats:[{v:'~12kg',l:'Est. weight'},{v:'13',l:'Items'},{v:'8kg',l:'Courier limit'}],
    banner:null,
@@ -799,8 +812,8 @@ const ACTIONS=[
    ],
    log:[]},
 
-  {id:'A5',type:'Order missing',severity:'standard',isZone:false,needsCall:true,time:'6 May, 10:58',openedAt:Date.now()-12*60*1000,tags:[],assignedTo:'Agent Name',source:'System — automated detection',
-   desc:'Order #A-2841 at Burger Palace not collected by assigned courier.',orderId:'#A-2841',
+  {id:'A5',type:'Order missing',severity:'standard',isZone:false,needsCall:true,time:'6 May, 10:58',openedAt:Date.now()-12*60*1000,assignedAt:Date.now()-12*60*1000,assignedBy:null,tags:[],assignedTo:'Agent Name',source:'System — automated detection',
+   desc:'Order #123458 at Burger Palace not collected by assigned courier.',orderId:'#123458',
    trigger:[{r:'Time since order ready',v:'11 min',t:'Threshold: >8 min'},{r:'Courier geofence',v:'Confirmed within range',t:null},{r:'Courier status',v:'Not arrived at pickup',t:null}],
    stats:[{v:'11m',l:'Since order ready'},{v:'0.8mi',l:'Courier distance'},{v:'0',l:'Prior incidents at Burger Palace'}],
    banner:null,
@@ -993,7 +1006,7 @@ function rl(){
         <button class="card-menu" onclick="event.stopPropagation()" aria-label="More options">⋮</button>
       </div>
       ${tags?`<div class="card-tags">${tags}</div>`:''}${cn}
-      <div class="card-footer">Opened: ${minsAgo(a.openedAt||Date.now())} · Assigned to ${a.assignedTo||'Agent Name'}</div>
+      <div class="card-footer"><span>Opened: ${minsAgo(a.openedAt||Date.now())}</span><span>${a.assignedBy?`Assigned to me by <strong>${a.assignedBy}</strong>: ${minsAgo(a.assignedAt||a.openedAt)}`:`Auto-assigned to me: ${minsAgo(a.assignedAt||a.openedAt)}`}</span></div>
     </div>`;
   }).join('')||'<div style="padding:28px 16px;font-size:14px;color:var(--dt-color-content-disabled);text-align:center">No issues</div>';
 }
@@ -1016,7 +1029,7 @@ function renderClosedTab(){
 
 /* ===== CORE ===== */
 function ms2(id,i){
-  gc(id)[i]=true;
+  gc(id)[i]=Date.now();
   if(skipped[id]&&skipped[id][i])delete skipped[id][i];
   const a=ACTIONS.find(x=>x.id===id);
   gl(id).push({t:ts(),text:`<strong>Step ${i+1} complete</strong> — ${a.steps[i].label}`,agent:true});
@@ -1033,7 +1046,7 @@ function rd(id){
   const a=ACTIONS.find(x=>x.id===id);if(!a)return;
   const ch=gc(id),l=gl(id),m=gm(id);
   const tab=m.detailTab||'steps';
-  if(m.showComplete===undefined)m.showComplete=true;
+  if(m.showComplete===undefined)m.showComplete=false;
   const showComplete=m.showComplete;
   const firstInc=a.steps.findIndex((s,i)=>!ch[i]&&!(skipped[id]&&skipped[id][i]));
   const doneCount=a.steps.filter((s,i)=>ch[i]||(skipped[id]&&skipped[id][i])).length;
@@ -1074,7 +1087,7 @@ function rd(id){
     if(m.ovNote&&i===0)ni+=`<div class="inline-note"><span class="no">Override applied</span>${m.ovNote}</div>`;
     if(m.compensation&&i===1&&id==='A5')ni+=`<div class="inline-note"><span class="nl">Compensation decision</span>${m.compensation.give?'Approved':'Not given'} — ${m.compensation.reason}</div>`;
     if(m.payBoostOffered&&i===0&&id==='A6')ni+=`<div class="inline-note"><span class="nl">Pay boost</span>Boost sent to offline couriers in N4</div>`;
-    const footer=`<div class="step-complete-footer">${done?`Complete · ${a.assignedTo}`:`Assigned to ${a.assignedTo}`}</div>`;
+    const footer=`<div class="step-complete-footer">${done?`You completed this step ${minsAgo(ch[i])}`:`Assigned to ${a.assignedTo}`}</div>`;
     return`<div class="step-card ${cardCls}">${hdr}${btnsHtml}${ctbl}${skipTag}${ni}${footer}</div>`;
   }
 
@@ -1082,8 +1095,10 @@ function rd(id){
   if(tab==='steps'){
     const incHtml=a.steps.map((s,i)=>{if(ch[i]||(skipped[id]&&skipped[id][i]))return'';return renderStep(s,i);}).join('');
     const cmpHtml=a.steps.map((s,i)=>{if(!ch[i]&&!(skipped[id]&&skipped[id][i]))return'';return renderStep(s,i);}).join('');
-    const toggleHtml=doneCount>0?`<div class="step-toggle-row"><span class="step-toggle-label">Hide complete steps</span><div class="step-toggle${!showComplete?' on':''}" onclick="rdToggleHide('${id}')"><div class="step-toggle-knob"></div></div></div>`:'';
-    tabContent=`<div class="step-list-wrap">${incHtml||''}${toggleHtml}${showComplete?cmpHtml:''}</div>`;
+    const pct=a.steps.length?Math.round(doneCount/a.steps.length*100):0;
+    const progressHtml=`<div class="progress-section"><div class="progress-label">Progress</div><div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div></div>`;
+    const toggleHtml=doneCount>0?`<div class="step-toggle-row"><span class="step-toggle-label">${showComplete?'Hide complete steps':'View complete steps'}</span><div class="step-toggle${showComplete?' on':''}" onclick="rdToggleHide('${id}')"><div class="step-toggle-knob"></div></div></div>`:'';
+    tabContent=`<div class="step-list-wrap">${incHtml||''}${toggleHtml}${showComplete?cmpHtml:''}</div>${progressHtml}`;
   } else if(tab==='details'){
     tabContent=`<div class="detail-body">
       <div class="section"><div class="table-scroll" style="margin-top:0"><table class="trigger-table">${tr}</table></div></div>
@@ -1110,14 +1125,14 @@ function rd(id){
     ${tabContent}`;
 }
 function rdTab(id,tab){gm(id).detailTab=tab;if(sel===id)rd(id);}
-function rdToggleHide(id){const m=gm(id);m.showComplete=m.showComplete===false?true:false;if(sel===id)rd(id);}
+function rdToggleHide(id){const m=gm(id);m.showComplete=m.showComplete===false?true:false;if(sel===id){const sw=document.querySelector('.step-list-wrap');const st=sw?sw.scrollTop:0;rd(id);requestAnimationFrame(()=>{const s=document.querySelector('.step-list-wrap');if(s)s.scrollTop=st;});}}
 
 /* ===== A1 ABUSE REPORT — STEP UX ===== */
 function rdA1(id){
   const a=ACTIONS.find(x=>x.id===id);if(!a)return;
   const ch=gc(id),l=gl(id),m=gm(id);
   const tab=m.detailTab||'steps';
-  if(m.showComplete===undefined)m.showComplete=true;
+  if(m.showComplete===undefined)m.showComplete=false;
   const showComplete=m.showComplete;
   if(!m.escalateChecks)m.escalateChecks=[false,false,false];
 
@@ -1138,16 +1153,16 @@ function rdA1(id){
 
     if(step.id==='call'){
       const btnCls=(done||isSk)?'outline':(isOrange?'orange':'dark');
-      inner+=`<button class="step-cta-btn ${btnCls}" onclick="a1CallCourier('${id}',${i})"><icon-phone size="xs"></icon-phone> Call ${a.courierName}</button>`;
-      inner+=done?`<div class="step-complete-footer">Complete${m.callTime?' · '+m.callTime:''} · ${a.assignedTo}</div>`:`<div class="step-complete-footer">Assigned to ${a.assignedTo}</div>`;
+      inner+=`<button class="step-cta-btn ${btnCls}" onclick="a1CallCourier('${id}',${i})"><icon-phone size="xs"></icon-phone> ${done?`Call ${a.courierName} again`:`Call ${a.courierName}`}</button>`;
+      inner+=done?`<div class="step-complete-footer">You completed this step ${minsAgo(ch[i])}</div>`:`<div class="step-complete-footer">Assigned to ${a.assignedTo}</div>`;
       inner+=skipTag;
     } else if(step.id==='notes'){
       const btnLabel=done?'Update notes':'Save notes';
       const btnCls=done?'outline':(m.notes?'orange':'dark');
-      inner+=`<label class="step-notes-label">Notes</label>
-        <div class="step-notes-wrap"><textarea id="a1-notes-ta" class="step-notes-ta" rows="4" placeholder="Placeholder" oninput="a1NoteInput(this)">${m.notes||''}</textarea></div>
+      inner+=`<label class="step-notes-label">Notes from call with Courier</label>
+        <div class="step-notes-wrap"><textarea id="a1-notes-ta" class="step-notes-ta" rows="4" placeholder="Add notes here" oninput="a1NoteInput(this)">${m.notes||''}</textarea></div>
         <button id="a1-save-btn" class="step-cta-btn ${btnCls}" onclick="a1SaveNotes('${id}',${i})">${btnLabel}</button>`;
-      inner+=`<div class="step-complete-footer">Assigned to ${a.assignedTo}</div>`;
+      inner+=done?`<div class="step-complete-footer">You completed this step ${minsAgo(ch[i])}</div>`:`<div class="step-complete-footer">Assigned to ${a.assignedTo}</div>`;
       inner+=skipTag;
     } else if(step.id==='escalate'){
       const checks=m.escalateChecks;
@@ -1160,8 +1175,8 @@ function rdA1(id){
         return`<div class="step-cb-row" onclick="a1ToggleCb('${id}',${ci})"><div class="step-cb-box${isChk?' chk':''}"></div><span class="step-cb-label">${lbl}</span></div>`;
       }).join('');
       inner+=`<div class="step-cb-list">${cbRows}</div>
-        <button class="step-cta-btn ${done?'outline':'dark'}"${btnDisabled} onclick="a1Escalate('${id}',${i})">Escalate to Safety Team</button>`;
-      inner+=done?`<div class="step-complete-footer">Complete${m.escalateTime?' · '+m.escalateTime:''} · ${a.assignedTo}</div>`:`<div class="step-complete-footer">Assigned to ${a.assignedTo}</div>`;
+        <button class="step-cta-btn ${done?'outline':'dark'}"${btnDisabled} onclick="a1Escalate('${id}',${i})">${done?'Ticket':'Escalate to Safety Team'}</button>`;
+      inner+=done?`<div class="step-complete-footer">You completed this step ${minsAgo(ch[i])}</div>`:`<div class="step-complete-footer">Assigned to ${a.assignedTo}</div>`;
       inner+=skipTag;
     }
     return`<div class="step-card ${cardCls}">${inner}</div>`;
@@ -1174,8 +1189,10 @@ function rdA1(id){
 
   let tabContent='';
   if(tab==='steps'){
-    const toggleHtml=doneCount>0?`<div class="step-toggle-row"><span class="step-toggle-label">Hide complete steps</span><div class="step-toggle${!showComplete?' on':''}" onclick="a1ToggleHide('${id}')"><div class="step-toggle-knob"></div></div></div>`:'';
-    tabContent=`<div class="step-list-wrap">${incHtml||''}${toggleHtml}${showComplete?cmpHtml:''}</div>`;
+    const pctA1=a.steps.length?Math.round(doneCount/a.steps.length*100):0;
+    const progressHtmlA1=`<div class="progress-section"><div class="progress-label">Progress</div><div class="progress-track"><div class="progress-fill" style="width:${pctA1}%"></div></div></div>`;
+    const toggleHtml=doneCount>0?`<div class="step-toggle-row"><span class="step-toggle-label">${showComplete?'Hide complete steps':'View complete steps'}</span><div class="step-toggle${showComplete?' on':''}" onclick="a1ToggleHide('${id}')"><div class="step-toggle-knob"></div></div></div>`:'';
+    tabContent=`<div class="step-list-wrap">${incHtml||''}${toggleHtml}${showComplete?cmpHtml:''}</div>${progressHtmlA1}`;
   } else if(tab==='details'){
     tabContent=`<div class="detail-body">
       ${a.banner?`<pie-notification variant="error" heading="${a.banner.title}" position="full-width" style="margin-bottom:var(--dt-spacing-d)">${a.banner.text}</pie-notification>`:''}
@@ -1205,7 +1222,7 @@ function rdA1(id){
 
 function a1Tab(tab){gm('A1').detailTab=tab;if(sel==='A1')rdA1('A1');}
 function a1NoteInput(ta){const btn=document.getElementById('a1-save-btn');if(btn)btn.className='step-cta-btn '+(ta.value.trim()?'orange':'dark');}
-function a1ToggleHide(id){const m=gm(id);m.showComplete=!m.showComplete;if(sel===id)rdA1(id);}
+function a1ToggleHide(id){const m=gm(id);m.showComplete=!m.showComplete;if(sel===id){const sw=document.querySelector('.step-list-wrap');const st=sw?sw.scrollTop:0;rdA1(id);requestAnimationFrame(()=>{const s=document.querySelector('.step-list-wrap');if(s)s.scrollTop=st;});}}
 function a1StepMenu(e,id,i){e.stopPropagation();promptSkipStep(id,i);}
 
 function a1CallCourier(id,i){
@@ -1280,7 +1297,7 @@ function rdClosed(idx){
       <pie-button variant="ghost" size="xsmall" onclick="backToList()"><icon-arrow-left size="xs"></icon-arrow-left> Recently closed</pie-button>
       <div class="detail-header-row">
         <div class="detail-title">${a.type}</div>
-        <pie-button variant="secondary" size="xsmall" onclick="openClosedTicket(${idx})">Open</pie-button>
+        <pie-button variant="secondary" size="xsmall" onclick="openClosedTicket(${idx})">Ticket</pie-button>
       </div>
       <div class="detail-meta">${stag(a.severity)}${otag(a.orderId)}<span class="ptag ptag-neutral">Closed</span><span style="font-size:12px;color:var(--dt-color-content-disabled)">${timeAgo(c.closedAt)}</span></div>
     </div>
