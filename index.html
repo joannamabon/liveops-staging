@@ -257,6 +257,7 @@ body{font-family:var(--dt-font-family-primary),var(--dt-font-family-secondary),s
 .sb-icon{width:56px;height:56px;border-radius:12px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#242E30;transition:background .12s,color .12s;}
 .sb-icon:hover{background:#F0ECE6;}
 .sb-icon.sb-active{color:#F36805;}
+.sb-icon svg,.sb-icon>*{width:24px;height:24px;}
 /* LIST HEADER */
 .list-header{padding:16px;flex-shrink:0;border-bottom:1px solid #F0ECE6;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;}
 .list-header-row{display:flex;align-items:center;justify-content:space-between;}
@@ -1145,7 +1146,7 @@ function rd(id){
     if(m.ovNote&&i===0)ni+=`<div class="inline-note"><span class="no">Override applied</span>${m.ovNote}</div>`;
     if(m.compensation&&i===1&&id==='A5')ni+=`<div class="inline-note"><span class="nl">Compensation decision</span>${m.compensation.give?'Approved':'Not given'} — ${m.compensation.reason}</div>`;
     if(m.payBoostOffered&&i===0&&id==='A6')ni+=`<div class="inline-note"><span class="nl">Pay boost</span>Boost sent to offline couriers in N4</div>`;
-    const footerTxt=done?`You completed this step ${minsAgo(ch[i])}`:isSk?`You rejected this step ${minsAgo(skipped[id][i].t)}: ${skipped[id][i].r}`:`Assigned to ${a.assignedTo||''}`;
+    const footerTxt=done?`You completed this step ${minsAgo(ch[i])}`:isSk?`You rejected this step ${minsAgo(skipped[id][i].t)}: ${skipped[id][i].r}`:`${a.assignedTo?`Assigned to ${a.assignedTo}`:'<strong>Unassigned</strong>'}`;
     const footer=`<div class="step-complete-footer">${footerTxt}</div>`;
     return`<div class="step-card ${cardCls}">${hdr}${btnsHtml}${ctbl}${ni}${footer}</div>`;
   }
@@ -1224,7 +1225,7 @@ function rdA1(id){
     const cardCls=(done||isSk)?'complete':(isActive?'active':'');
     const menuBtn=(!done&&!isSk)?`<button class="step-menu-btn" onclick="a1StepMenu(event,'${id}',${i})" aria-label="Step options"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="4" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="10" cy="16" r="1.5"/></svg></button>`:'';
     const hdr=`<div class="step-card-header"><div style="flex:1;min-width:0"><div class="step-title">${step.label}</div><div class="step-sub">${step.sub}</div></div>${menuBtn}</div>`;
-    const footerTxt=done?`You completed this step ${minsAgo(ch[i])}`:isSk?`You rejected this step ${minsAgo(skipped[id][i].t)}: ${skipped[id][i].r}`:`Assigned to ${a.assignedTo}`;
+    const footerTxt=done?`You completed this step ${minsAgo(ch[i])}`:isSk?`You rejected this step ${minsAgo(skipped[id][i].t)}: ${skipped[id][i].r}`:`${a.assignedTo?`Assigned to ${a.assignedTo}`:'<strong>Unassigned</strong>'}`;
     const footerHtml=`<div class="step-complete-footer">${footerTxt}</div>`;
     let inner=hdr;
 
