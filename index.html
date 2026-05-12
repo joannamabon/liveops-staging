@@ -1115,7 +1115,8 @@ function rd(id){
     const menuBtn=(!done&&!isSk)?`<button class="step-menu-btn" onclick="a1StepMenu(event,'${id}',${i})" aria-label="Step options"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="4" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="10" cy="16" r="1.5"/></svg></button>`:'';
     const hdr=`<div class="step-card-header"><div style="flex:1;min-width:0"><div class="step-title">${step.label}</div>${step.sub?`<div class="step-sub">${step.sub}</div>`:''}</div>${menuBtn}</div>`;
     const skipTag=isSk?`<span class="step-skip-tag">Not needed — ${skipped[id][i]}</span>`:'';
-    const btnsHtml=step.btns.map(b=>`<button class="step-cta-btn ${done||isSk?'outline':(isActive&&b.c==='primary')?'orange':'dark'}" onclick="hb(event,'${id}',${i},'${b.l}')">${b.i?b.i+' ':''}${b.l}</button>`).join('');
+    const singleActive=isActive&&step.btns.length===1;
+    const btnsHtml=step.btns.map(b=>`<button class="step-cta-btn ${done||isSk?'outline':singleActive?'orange':'dark'}" onclick="hb(event,'${id}',${i},'${b.l}')">${b.i?b.i+' ':''}${b.l}</button>`).join('');
     let ctbl='';
     if(step.courierList){
       const crs=a[step.ck]||[];const isE=step.ck==='excessCouriers';const cs=m['c_'+step.ck]||new Set();
@@ -1223,7 +1224,7 @@ function rdA1(id){
       inner+=skipTag;
     } else if(step.id==='notes'){
       const btnLabel=done?'Update notes':'Save notes';
-      const btnCls=done?'outline':(m.notes?'orange':'dark');
+      const btnCls=done?'outline':(isOrange?'orange':'dark');
       inner+=`<label class="step-notes-label">Notes from call with Courier</label>
         <div class="step-notes-wrap"><textarea id="a1-notes-ta" class="step-notes-ta" rows="4" placeholder="Add notes here" oninput="a1NoteInput(this)">${m.notes||''}</textarea></div>
         <button id="a1-save-btn" class="step-cta-btn ${btnCls}" onclick="a1SaveNotes('${id}',${i})">${btnLabel}</button>`;
@@ -1233,7 +1234,7 @@ function rdA1(id){
       const checks=m.escalateChecks;
       const labels=['Courier injured','Partner bad behaviour','Courier bad behaviour'];
       const anyChecked=checks.some(c=>c);
-      const btnCls=done?'outline':(anyChecked?'dark':'dark');
+      const btnCls=done?'outline':(isOrange?'orange':'dark');
       const btnDisabled=(!done&&!isSk&&!anyChecked)?' disabled':'';
       const cbRows=labels.map((lbl,ci)=>{
         const isChk=done||isSk||checks[ci];
@@ -1296,7 +1297,7 @@ function rdA1(id){
 }
 
 function a1Tab(tab){gm('A1').detailTab=tab;if(sel==='A1')rdA1('A1');}
-function a1NoteInput(ta){const btn=document.getElementById('a1-save-btn');if(btn)btn.className='step-cta-btn '+(ta.value.trim()?'orange':'dark');}
+function a1NoteInput(ta){}
 function a1ToggleHide(id){const m=gm(id);m.showComplete=!m.showComplete;if(sel===id){const sw=document.querySelector('.step-list-wrap');const st=sw?sw.scrollTop:0;rdA1(id);requestAnimationFrame(()=>{const s=document.querySelector('.step-list-wrap');if(s)s.scrollTop=st;});}}
 function a1StepMenu(e,id,i){e.stopPropagation();promptSkipStep(id,i);}
 
